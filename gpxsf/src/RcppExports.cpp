@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // test
-Rcpp::List test();
+Rcpp::NumericMatrix test();
 RcppExport SEXP _gpxsf_test() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

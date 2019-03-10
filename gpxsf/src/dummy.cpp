@@ -3,7 +3,6 @@
 #include <fstream>
 #include <rapidxml.hpp>
 
-
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -12,13 +11,10 @@ using namespace rapidxml;
 // [[Rcpp::depends(rapidxmlr)]]
 
 // [[Rcpp::export]]
-Rcpp::List test() {
+Rcpp::NumericMatrix test() {
 
   xml_document<> doc;
   xml_node<> *root_node;
-
-  double lon;
-  double lat;
 
   std::vector< double > lons;
   std::vector< double > lats;
@@ -47,9 +43,6 @@ Rcpp::List test() {
         const char* clon = trk_pt_node -> first_attribute("lon") -> value();
         const char* clat = trk_pt_node -> first_attribute("lat") -> value();
 
-        //lon = atof( clon );
-        //lat = atof( clat );
-
         lons.push_back( atof( clon ) );
         lats.push_back( atof( clat ) );
       }
@@ -57,11 +50,18 @@ Rcpp::List test() {
     }
   }
 
-  Rcpp::List coords = Rcpp::List::create(
-    Rcpp::_["lon"] = lons,
-    Rcpp::_["lat"] = lats
-  );
+  int n = lons.size();
 
-  return coords;
+  Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
+  Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
 
+  Rcpp::NumericMatrix linestring( n, 2 );
+
+  linestring(_, 0) = nv_lons;
+  linestring(_, 1) = nv_lats;
+
+  linestring.attr("class") = Rcpp::CharacterVector::create("XY", "LINESTRING", "sfg");
+
+
+  return linestring;
 }
