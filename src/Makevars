@@ -1,0 +1,5 @@
+CXX_STD = CXX11
+
+#PKG_LIBS = -lboost_date_time
+PKG_CXXFLAGS = -I../inst/include/
+PKG_CPPFLAGS=-DSTRICT_R_HEADERS
