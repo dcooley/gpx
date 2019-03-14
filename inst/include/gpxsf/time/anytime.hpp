@@ -1,5 +1,5 @@
-#ifndef GPXSF_ANYTIME_H
-#define GPXSF_ANYTIME_H
+#ifndef GPXSF_TIME_ANYTIME_H
+#define GPXSF_TIME_ANYTIME_H
 
 
 #if !defined(BOOST_NO_AUTO_PTR)

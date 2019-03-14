@@ -5,19 +5,21 @@
 
 using namespace Rcpp;
 
-// test
-Rcpp::NumericMatrix test();
-RcppExport SEXP _gpxsf_test() {
+// rcpp_gpx_to_sf
+Rcpp::List rcpp_gpx_to_sf(std::vector< std::string > gpx_files, std::string time_format);
+RcppExport SEXP _gpxsf_rcpp_gpx_to_sf(SEXP gpx_filesSEXP, SEXP time_formatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(test());
+    Rcpp::traits::input_parameter< std::vector< std::string > >::type gpx_files(gpx_filesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type time_format(time_formatSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_gpx_to_sf(gpx_files, time_format));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_gpxsf_test", (DL_FUNC) &_gpxsf_test, 0},
+    {"_gpxsf_rcpp_gpx_to_sf", (DL_FUNC) &_gpxsf_rcpp_gpx_to_sf, 2},
     {NULL, NULL, 0}
 };
 

@@ -4,16 +4,21 @@
 #include <rapidxml.hpp>
 
 #include "gpxsf/track/track.hpp"
+#include "gpxsf/time/scale.hpp"
+#include "gpxsf/time/counter.hpp"
+
+#include "gpxsf/sf/sfg.hpp"
+#include "gpxsf/sf/sfc.hpp"
 
 #include <Rcpp.h>
-using namespace Rcpp;
 
+using namespace Rcpp;
 using namespace rapidxml;
 
 // [[Rcpp::depends(rapidxmlr)]]
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix test() {
+Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string time_format ) {
 
   xml_document<> doc;
   xml_node<> *root_node;
@@ -23,36 +28,53 @@ Rcpp::NumericMatrix test() {
   std::vector< double > elev;
   std::vector< double > time;
 
-  //std::ifstream theFile ("/Users/dave/Documents/Data/Strava/Bethan/activities/1007343724.gpx");
+  int n = gpx_files.size();
+  int i;
+  Rcpp::List sfc( n );
 
-  std::ifstream theFile( "/Users/dave/Downloads/run.gpx");
+  Rcpp::NumericVector bbox = gpxsf::sfc::start_bbox();
 
-  std::vector<char> buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
-  buffer.push_back('\0');
-  // Parse the buffer using the xml file parsing library into doc
-  doc.parse<0>( &buffer[0] );
+  for( i = 0; i < n; i++ ) {
 
-  root_node = doc.first_node("gpx");
+    std::string f = gpx_files[i];
+    std::ifstream theFile( f );
 
-  gpxsf::track::get_track( root_node, lons, lats, elev, time );
+    std::vector<char> buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
+    buffer.push_back('\0');
 
-  //gpxsf::track::string_to_datetime( time );
+    doc.parse<0>( &buffer[0] );
 
-  int n = lons.size();
+    root_node = doc.first_node("gpx");
 
-  Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
-  Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
-  Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
-  Rcpp::NumericVector nv_time = Rcpp::wrap( time );
+    gpxsf::track::get_track( root_node, bbox, lons, lats, elev, time );
 
-  Rcpp::NumericMatrix linestring( n, 4 );
+    int n = lons.size();
 
-  linestring(_, 0) = nv_lons;
-  linestring(_, 1) = nv_lats;
-  linestring(_, 2) = nv_elev;
-  linestring(_, 3) = nv_time;
+    Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
+    Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
+    Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
+    Rcpp::NumericVector nv_time = Rcpp::wrap( time );
 
-  linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+    // datetime
+    // default
+    if( time_format == "counter" ) {
+      gpxsf::counter::counter( nv_time );
 
-  return linestring;
+    } else if ( time_format == "normalise" ) {
+      gpxsf::scale::rescale( nv_time );
+    }
+
+    Rcpp::NumericMatrix linestring( n, 4 );
+
+    linestring(_, 0) = nv_lons;
+    linestring(_, 1) = nv_lats;
+    linestring(_, 2) = nv_elev;
+    linestring(_, 3) = nv_time;
+
+    linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+    sfc[i] = linestring;
+  }
+
+  gpxsf::sfc::attach_sfc_attributes( sfc, bbox );
+  return sfc;
 }
