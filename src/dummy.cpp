@@ -30,6 +30,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
 
   int n = gpx_files.size();
   int i;
+  Rcpp::List sf(1);
   Rcpp::List sfc( n );
 
   Rcpp::NumericVector bbox = gpxsf::sfc::start_bbox();
@@ -76,5 +77,18 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   }
 
   gpxsf::sfc::attach_sfc_attributes( sfc, bbox );
-  return sfc;
+  sf[0] = sfc;
+
+  // properties / column names
+  std::vector< std::string >sv( 1 );
+  sv[0] = "geometry";
+  sf.names() = sv;
+
+  Rcpp::IntegerVector rn = Rcpp::seq( 1, n );
+  sf.attr("row.names") = rn;
+  sf.attr("sf_column") = "geometry";
+
+
+  sf.attr("class") = Rcpp::CharacterVector::create("sf", "data.frame");
+  return sf;
 }
