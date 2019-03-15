@@ -5,6 +5,26 @@
 
 using namespace Rcpp;
 
+// preallocate
+void preallocate(std::string f);
+RcppExport SEXP _gpxsf_preallocate(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type f(fSEXP);
+    preallocate(f);
+    return R_NilValue;
+END_RCPP
+}
+// push_back
+void push_back(std::string f);
+RcppExport SEXP _gpxsf_push_back(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type f(fSEXP);
+    push_back(f);
+    return R_NilValue;
+END_RCPP
+}
 // rcpp_gpx_to_sf
 Rcpp::List rcpp_gpx_to_sf(std::vector< std::string > gpx_files, std::string time_format);
 RcppExport SEXP _gpxsf_rcpp_gpx_to_sf(SEXP gpx_filesSEXP, SEXP time_formatSEXP) {
@@ -19,6 +39,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_gpxsf_preallocate", (DL_FUNC) &_gpxsf_preallocate, 1},
+    {"_gpxsf_push_back", (DL_FUNC) &_gpxsf_push_back, 1},
     {"_gpxsf_rcpp_gpx_to_sf", (DL_FUNC) &_gpxsf_rcpp_gpx_to_sf, 2},
     {NULL, NULL, 0}
 };

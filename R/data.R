@@ -1,6 +1,8 @@
 #' run gpx
 #'
-#' Sample data set from [mapbox](https://docs.mapbox.com/help/glossary/gpx/)
+#' Sample gpx data set from [mapbox](https://docs.mapbox.com/help/glossary/gpx/)
 #'
-#' @export
-"run.gpx"
+#' @name run
+#' @docType data
+#' @keywords data
+NULL

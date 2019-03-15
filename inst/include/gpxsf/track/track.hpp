@@ -41,17 +41,25 @@ namespace track {
 
       gpxsf::sfc::calculate_bbox( bbox, dlon, dlat );
 
-      const char* cele = trk_pt_node -> first_node("ele") -> value();
-      const char* ctim = trk_pt_node -> first_node("time") -> value();
-
-      std::string stim = std::string( ctim );
-
-      double d = gpxsf::anytime::stringToTime( stim );
-
       lons.push_back( dlon );
       lats.push_back( dlat );
-      elev.push_back( atof( cele ) );
-      time.push_back( d );
+
+      // ele & time are optional
+      if( trk_pt_node -> first_node("ele") ) {
+        const char* cele = trk_pt_node -> first_node("ele") -> value();
+        elev.push_back( atof( cele ) );
+      } else {
+        elev.push_back( NA_REAL );
+      }
+
+      if( trk_pt_node -> first_node("time") ) {
+        const char* ctim = trk_pt_node -> first_node("time") -> value();
+        std::string stim = std::string( ctim );
+        double d = gpxsf::anytime::stringToTime( stim );
+        time.push_back( d );
+      } else {
+        time.push_back( NA_REAL );
+      }
     }
   }
 
