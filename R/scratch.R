@@ -1,5 +1,5 @@
-
-
+#
+#
 # fp <- path.expand("~/Documents/Data/Strava/Bethan/activities/")
 # l <- list.files(fp, patter = "gpx$")
 #
@@ -24,5 +24,5 @@
 #   },
 #   times = 1
 # )
-
-
+#
+#

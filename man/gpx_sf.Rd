@@ -34,6 +34,7 @@ Times are assumed to be in UTC and conforming to ISO 8601, as per the specificat
 
 f <- system.file("data/run.gpx", package = "gpxsf")
 sf <- gpx_sf( f )
+str( sf )
 
 
 # load sf library for print method
