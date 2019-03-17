@@ -1,17 +1,13 @@
 #ifndef GPXSF_TIME_ANYTIME_H
 #define GPXSF_TIME_ANYTIME_H
 
+// anytime.hpp uses code from Dirk Eddelbuettel's anytime library, specifically anytime.cpp
+// https://github.com/eddelbuettel/anytime/blob/master/src/anytime.cpp
 
 #if !defined(BOOST_NO_AUTO_PTR)
 #define BOOST_NO_AUTO_PTR
 #endif
 #include <boost/date_time.hpp>
-//#include <boost/date_time/local_time_adjustor.hpp>
-//#include <boost/date_time/c_local_time_adjustor.hpp>
-//#include <boost/lexical_cast.hpp>
-//#include <boost/algorithm/string/classification.hpp>
-//#include <boost/algorithm/string/predicate.hpp>
-//#include <boost/algorithm/string/split.hpp>
 
 #include <Rcpp.h>
 

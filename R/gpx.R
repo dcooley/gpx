@@ -3,7 +3,8 @@
 #' Converts GPX files to simple feature objects.
 #'
 #' @param gpx path to gpx files
-#' @param time_format one of default, counter or normalise. See Details
+#' @param time_return the format of the time element returned to the sf object.
+#' One of datetime, counter or normalise. See Details
 #'
 #' @return \code{sf} object wtih XYZM dimensions
 #'
@@ -33,7 +34,34 @@
 #' # sf
 #'
 #' @export
-gpx_sf <- function( gpx, time_format = c("datetime","counter","normalise") ) {
-  time_format <- match.arg( time_format )
-  rcpp_gpx_to_sf( gpx, time_format)
+gpx_sf <- function( gpx, time_return = c("datetime","counter","normalise") ) {
+  UseMethod("gpx_sf")
+}
+
+#' @export
+gpx_sf.character <- function( gpx, time_return = c("datetime", "counter", "normalise")) {
+
+  time_return <- match.arg( time_return )
+
+  if( file.exists( gpx ) ) {
+    return( rcpp_gpx_to_sf( normalizePath( gpx ), time_return ) )
+  } else {
+    stop("Can't find the gpx file")
+  }
+}
+
+
+
+is_url <- function(gpx) grepl("^https?://", geojson, useBytes=TRUE)
+
+read_url <- function(con) {
+  out <- tryCatch({
+    paste0(readLines(con), collapse = "")
+  },
+  error = function(cond){
+    stop("There was an error downloading the gpx")
+  },
+  finally = {
+    close(con)
+  })
 }

@@ -6,6 +6,12 @@
 #include "gpxsf/time/anytime.hpp"
 #include "gpxsf/sf/sfc.hpp"
 
+#include "gpxsf/utils.hpp"
+
+
+#include "gpxsf/time/scale.hpp"
+#include "gpxsf/time/counter.hpp"
+
 #include <rapidxml.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
@@ -80,21 +86,62 @@ namespace track {
     }
   }
 
-  inline void get_track(
+  inline Rcpp::List get_track(
       xml_node<> *root_node,
+      Rcpp::List& sfgs,
+      int& sfg_objects,
       Rcpp::NumericVector& bbox,
-      std::vector< double >& lons,
-      std::vector< double >& lats,
-      std::vector< double >& elev,
-      std::vector< double >& time ) {
+      std::string& time_format
+  ) {
+
+    Rcpp::List sfc( 1 );
+
+    std::vector< double > lons;
+    std::vector< double > lats;
+    std::vector< double > elev;
+    std::vector< double > time;
+
+    size_t trk_counter = 0;
 
     for(
        xml_node<> *trk_node = root_node -> first_node("trk");
        trk_node;
        trk_node = trk_node -> next_sibling()
        ) {
+      // TODO
+      // every sibling must be a new LINESTRING
       gpxsf::track::get_segments( trk_node, bbox, lons, lats, elev, time );
+
+      int n = lons.size();
+
+      Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
+      Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
+      Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
+      Rcpp::NumericVector nv_time = Rcpp::wrap( time );
+
+      // datetime - default
+      if( time_format == "counter" ) {
+        gpxsf::counter::counter( nv_time );
+      } else if ( time_format == "normalise" ) {
+        gpxsf::scale::rescale( nv_time );
+      }
+
+      // I'm making it a XYZM object
+      Rcpp::NumericMatrix linestring( n, 4 );
+
+      linestring(_, 0) = nv_lons;
+      linestring(_, 1) = nv_lats;
+      linestring(_, 2) = nv_elev;
+      linestring(_, 3) = nv_time;
+
+      // sfg = linestring
+      linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+      sfgs[ trk_counter ] = linestring;
+      trk_counter++;
+      sfg_objects++;
     }
+    sfc[0] = sfgs;
+    return sfc;
   }
 
 

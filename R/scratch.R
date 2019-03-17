@@ -11,7 +11,7 @@
 #
 # microbenchmark::microbenchmark(
 #   gpxsf = {
-#     sf <- gpxsf:::rcpp_gpx_to_sf( gpx[1], "default" )
+#     sf <- gpxsf:::rcpp_gpx_to_sf( gpx[1:3], "default" )
 #   },
 #   preallocate = {
 #     gpxsf:::preallocate( gpx[1] )
@@ -26,3 +26,14 @@
 # )
 #
 #
+#
+# l1 <- sf::st_linestring( x = matrix(c(0,0,1,1), ncol = 2))
+# l2 <- sf::st_linestring( x = matrix(c(0,0,1,1), ncol = 2))
+#
+# sfc <- sf::st_sfc( list(l1, l2))
+#
+# str( sfc )
+# str( sf::st_sf( geometry = sfc ))
+#
+# str( sf )
+

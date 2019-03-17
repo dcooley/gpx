@@ -4,12 +4,13 @@
 \alias{gpx_sf}
 \title{gpx sf}
 \usage{
-gpx_sf(gpx, time_format = c("datetime", "counter", "normalise"))
+gpx_sf(gpx, time_return = c("datetime", "counter", "normalise"))
 }
 \arguments{
 \item{gpx}{path to gpx files}
 
-\item{time_format}{one of default, counter or normalise. See Details}
+\item{time_return}{the format of the time element returned to the sf object.
+One of datetime, counter or normalise. See Details}
 }
 \value{
 \code{sf} object wtih XYZM dimensions

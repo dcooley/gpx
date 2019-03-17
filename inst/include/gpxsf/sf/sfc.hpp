@@ -54,26 +54,79 @@ namespace sfc {
     sfc.attr("bbox") = bbox;
   }
 
-/*
+  inline void fetch_geometries(Rcpp::List& sf, Rcpp::List& res, int& sfg_counter) {
+
+    std::string geom_attr;
+
+    for (Rcpp::List::iterator it = sf.begin(); it != sf.end(); it++) {
+
+      switch( TYPEOF(*it) ) {
+
+      case VECSXP: {
+        Rcpp::List tmp = Rcpp::as< Rcpp::List >( *it );
+        if(Rf_isNull(tmp.attr("class"))) {
+          fetch_geometries(tmp, res, sfg_counter);
+        } else {
+          res[sfg_counter] = tmp;
+          sfg_counter++;
+        }
+        break;
+      }
+      case REALSXP: {
+        Rcpp::NumericVector tmp = Rcpp::as< Rcpp::NumericVector >( *it );
+        if(Rf_isNull(tmp.attr("class"))) {
+          Rcpp::stop("Geometry could not be determined");
+        } else {
+          res[sfg_counter] = tmp;
+          sfg_counter++;
+        }
+        break;
+      }
+      case INTSXP: {
+        Rcpp::IntegerVector tmp = Rcpp::as< Rcpp::IntegerVector >( *it );
+        if(Rf_isNull( tmp.attr( "class" ) ) ){
+          Rcpp::stop("Geometry could not be determined");
+        } else {
+          res[sfg_counter] = tmp;
+          sfg_counter++;
+        }
+        break;
+      }
+      case STRSXP: {
+        Rcpp::StringVector tmp = Rcpp::as< Rcpp::StringVector >( *it );
+        if(Rf_isNull( tmp.attr( "class" ) ) ) {
+          Rcpp::stop("Geometry could not be determined");
+        } else {
+          res[sfg_counter] = tmp;
+          sfg_counter++;
+        }
+        break;
+      }
+      default: {
+        //res[0] = create_null_sfc();
+        Rcpp::stop("Geometry could not be determined");
+      }
+      }
+    }
+  }
+
   inline Rcpp::List construct_sfc(
       int& sfg_objects,
       Rcpp::List& sf,
-      Rcpp::NumericVector& bbox,
-      std::unordered_set< std::string >& geometry_types,
-      int& nempty
+      Rcpp::NumericVector& bbox
     ) {
 
+    //Rcpp::Rcout << "sfg_objects: " << sfg_objects << std::endl;
     Rcpp::List sfc_output( sfg_objects );
-    std::string geom_attr;
 
     int sfg_counter = 0;
 
-    geojsonsf::sfc::utils::fetch_geometries( sf, sfc_output, sfg_counter );
-    attach_sfc_attributes( sfc_output, geom_attr, bbox, geometry_types, nempty );
+    fetch_geometries( sf, sfc_output, sfg_counter );
+    attach_sfc_attributes( sfc_output, bbox );
 
     return sfc_output;
   }
-*/
+
 
 } // namespace sfc
 } // namespace geojsonsf
