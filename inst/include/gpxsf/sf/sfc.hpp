@@ -116,7 +116,6 @@ namespace sfc {
       Rcpp::NumericVector& bbox
     ) {
 
-    //Rcpp::Rcout << "sfg_objects: " << sfg_objects << std::endl;
     Rcpp::List sfc_output( sfg_objects );
 
     int sfg_counter = 0;

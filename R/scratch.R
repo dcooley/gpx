@@ -1,9 +1,13 @@
-#
-#
+
+
 # fp <- path.expand("~/Documents/Data/Strava/Bethan/activities/")
 # l <- list.files(fp, patter = "gpx$")
 #
 # gpx <- paste0(fp, l)
+#
+# library(sf)
+#
+# sf <- gpxsf::gpx_sf( gpx[1] )
 #
 # library(plotKML)
 #

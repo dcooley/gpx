@@ -88,7 +88,6 @@ namespace track {
 
   inline Rcpp::List get_track(
       xml_node<> *root_node,
-      Rcpp::List& sfgs,
       int& sfg_objects,
       Rcpp::NumericVector& bbox,
       std::string& time_format
@@ -103,11 +102,38 @@ namespace track {
 
     size_t trk_counter = 0;
 
+    size_t n_trk = gpxsf::utils::xml_size( root_node, "trk" );
+    Rcpp::List sfgs( n_trk );
+
     for(
        xml_node<> *trk_node = root_node -> first_node("trk");
        trk_node;
        trk_node = trk_node -> next_sibling()
        ) {
+
+      // trk name
+      //const char* trk_name = trk_node -> first_attribute("name") -> value();
+      //Rcpp::Rcout << "trk_name: " << trk_name << std::endl;
+      if( trk_node -> first_node("name") ) {
+        const char* trk_name = trk_node -> first_node("name") -> value();
+        Rcpp::Rcout << "name: " << trk_name << std::endl;
+
+      } else {
+        Rcpp::Rcout << "no trk name" << std::endl;
+        //elev.push_back( NA_REAL );
+      }
+
+
+
+      if( trk_node -> first_node("cmt") ) {
+        const char* trk_cmt = trk_node -> first_node("cmt") -> value();
+        Rcpp::Rcout << "cmt: " << trk_cmt << std::endl;
+
+      } else {
+        Rcpp::Rcout << "no trk cmt" << std::endl;
+        //elev.push_back( NA_REAL );
+      }
+
       // TODO
       // every sibling must be a new LINESTRING
       gpxsf::track::get_segments( trk_node, bbox, lons, lats, elev, time );

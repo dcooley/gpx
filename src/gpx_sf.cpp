@@ -7,6 +7,7 @@
 
 #include "gpxsf/sf/sfg.hpp"
 #include "gpxsf/sf/sfc.hpp"
+#include "gpxsf/sf/sf.hpp"
 
 #include <Rcpp.h>
 
@@ -66,11 +67,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
 
     root_node = doc.first_node("gpx");
 
-    size_t n_trk = gpxsf::utils::xml_size( root_node, "trk" );
-    //Rcpp::Rcout << "n_trk " << n_trk << std::endl;
-    Rcpp::List sfgs( n_trk );
-
-    sfc[i] = gpxsf::track::get_track( root_node, sfgs, sfg_objects, bbox, time_format );
+    sfc[i] = gpxsf::track::get_track( root_node, sfg_objects, bbox, time_format );
     //sfc[i] = sfgs;
   }
 
