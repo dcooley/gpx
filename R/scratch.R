@@ -29,6 +29,9 @@
 #   times = 1
 # )
 #
+
+# sf <- gpxsf::gpx_sf( "~/Downloads/ATB-Heerenveen.gpx")
+
 #
 #
 # l1 <- sf::st_linestring( x = matrix(c(0,0,1,1), ncol = 2))

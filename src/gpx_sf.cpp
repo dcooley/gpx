@@ -36,18 +36,12 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   xml_document<> doc;
   xml_node<> *root_node;
 
-  // std::vector< double > lons;
-  // std::vector< double > lats;
-  // std::vector< double > elev;
-  // std::vector< double > time;
-
   int n = gpx_files.size();
   int i;
   int sfg_objects = 0;
 
   Rcpp::List sf( 1 );
   Rcpp::List sfc( n );
-  //Rcpp::List sfgs( n );
 
   Rcpp::NumericVector bbox = gpxsf::sfc::start_bbox();
 
@@ -68,13 +62,10 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     root_node = doc.first_node("gpx");
 
     sfc[i] = gpxsf::track::get_track( root_node, sfg_objects, bbox, time_format );
-    //sfc[i] = sfgs;
   }
 
   Rcpp::List res = gpxsf::sfc::construct_sfc( sfg_objects, sfc, bbox );
 
-
-  //gpxsf::sfc::attach_sfc_attributes( sfc, bbox );
   sf[0] = res;
 
   // properties / column names

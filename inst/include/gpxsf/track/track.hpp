@@ -51,12 +51,8 @@ namespace track {
       lats.push_back( dlat );
 
       // ele & time are optional
-      if( trk_pt_node -> first_node("ele") ) {
-        const char* cele = trk_pt_node -> first_node("ele") -> value();
-        elev.push_back( atof( cele ) );
-      } else {
-        elev.push_back( NA_REAL );
-      }
+      gpxsf::utils::get_optional_element( trk_pt_node, "ele", elev );
+      //gpxsf::utils::get_optional_element( trk_pt_node, "time", time ); -- TIME is converted
 
       if( trk_pt_node -> first_node("time") ) {
         const char* ctim = trk_pt_node -> first_node("time") -> value();
@@ -99,6 +95,13 @@ namespace track {
     std::vector< double > lats;
     std::vector< double > elev;
     std::vector< double > time;
+    std::vector< std::string > name;
+    std::vector< std::string > cmt; // comments
+    std::vector< std::string > desc;
+    std::vector< std::string > src;
+    std::vector< std::string > link;
+    std::vector< double > number;
+    std::vector< std::string > type;
 
     size_t trk_counter = 0;
 
@@ -111,28 +114,14 @@ namespace track {
        trk_node = trk_node -> next_sibling()
        ) {
 
-      // trk name
-      //const char* trk_name = trk_node -> first_attribute("name") -> value();
-      //Rcpp::Rcout << "trk_name: " << trk_name << std::endl;
-      if( trk_node -> first_node("name") ) {
-        const char* trk_name = trk_node -> first_node("name") -> value();
-        Rcpp::Rcout << "name: " << trk_name << std::endl;
 
-      } else {
-        Rcpp::Rcout << "no trk name" << std::endl;
-        //elev.push_back( NA_REAL );
-      }
-
-
-
-      if( trk_node -> first_node("cmt") ) {
-        const char* trk_cmt = trk_node -> first_node("cmt") -> value();
-        Rcpp::Rcout << "cmt: " << trk_cmt << std::endl;
-
-      } else {
-        Rcpp::Rcout << "no trk cmt" << std::endl;
-        //elev.push_back( NA_REAL );
-      }
+      gpxsf::utils::get_optional_element( trk_node, "name", name );
+      gpxsf::utils::get_optional_element( trk_node, "cmt", cmt );
+      gpxsf::utils::get_optional_element( trk_node, "desc", desc );
+      gpxsf::utils::get_optional_element( trk_node, "src", src );
+      gpxsf::utils::get_optional_element( trk_node, "link", link );
+      gpxsf::utils::get_optional_element( trk_node, "number", number );
+      gpxsf::utils::get_optional_element( trk_node, "type", type );
 
       // TODO
       // every sibling must be a new LINESTRING
@@ -144,6 +133,16 @@ namespace track {
       Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
       Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
       Rcpp::NumericVector nv_time = Rcpp::wrap( time );
+
+      Rcpp::StringVector sv_name = Rcpp::wrap( name );
+      Rcpp::StringVector sv_cmt = Rcpp::wrap( cmt );
+      Rcpp::StringVector sv_desc = Rcpp::wrap( desc );
+      Rcpp::StringVector sv_src = Rcpp::wrap( src );
+      Rcpp::StringVector sv_link = Rcpp::wrap( link );
+      Rcpp::NumericVector nv_number = Rcpp::wrap( number );
+      Rcpp::StringVector sv_type = Rcpp::wrap( type );
+
+      //Rcpp::Rcout << "names: " << std::endl;
 
       // datetime - default
       if( time_format == "counter" ) {
