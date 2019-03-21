@@ -134,14 +134,6 @@ namespace track {
       Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
       Rcpp::NumericVector nv_time = Rcpp::wrap( time );
 
-      Rcpp::StringVector sv_name = Rcpp::wrap( name );
-      Rcpp::StringVector sv_cmt = Rcpp::wrap( cmt );
-      Rcpp::StringVector sv_desc = Rcpp::wrap( desc );
-      Rcpp::StringVector sv_src = Rcpp::wrap( src );
-      Rcpp::StringVector sv_link = Rcpp::wrap( link );
-      Rcpp::NumericVector nv_number = Rcpp::wrap( number );
-      Rcpp::StringVector sv_type = Rcpp::wrap( type );
-
       //Rcpp::Rcout << "names: " << std::endl;
 
       // datetime - default
@@ -166,6 +158,15 @@ namespace track {
       sfg_objects++;
     }
     sfc[0] = sfgs;
+
+    Rcpp::StringVector sv_name = Rcpp::wrap( name );
+    Rcpp::StringVector sv_cmt = Rcpp::wrap( cmt );
+    Rcpp::StringVector sv_desc = Rcpp::wrap( desc );
+    Rcpp::StringVector sv_src = Rcpp::wrap( src );
+    Rcpp::StringVector sv_link = Rcpp::wrap( link );
+    Rcpp::NumericVector nv_number = Rcpp::wrap( number );
+    Rcpp::StringVector sv_type = Rcpp::wrap( type );
+
     return sfc;
   }
 
