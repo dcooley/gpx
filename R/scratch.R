@@ -1,5 +1,5 @@
-#
-#
+
+
 # fp <- path.expand("~/Documents/Data/Strava/Bethan/activities/")
 # l <- list.files(fp, patter = "gpx$")
 #
@@ -7,15 +7,15 @@
 #
 # library(sf)
 #
-# sf <- gpxsf::gpx_sf( gpx[1] )
-#
+# sf <- gpxsf::gpx_sf( gpx[1:3] )
+
 # library(plotKML)
 #
 # library(microbenchmark)
 #
 # microbenchmark::microbenchmark(
 #   gpxsf = {
-#     sf <- gpxsf:::rcpp_gpx_to_sf( gpx[1:3], "default" )
+#     sf <- gpxsf:::rcpp_gpx_to_sf( gpx, "default" )
 #   },
 #   # preallocate = {
 #   #   gpxsf:::preallocate( gpx[1] )
@@ -32,6 +32,8 @@
 
 # sf <- gpxsf::gpx_sf( "~/Downloads/ATB-Heerenveen.gpx")
 
+# sf <- gpxsf::gpx_sf( c("~/Downloads/ATB-Heerenveen.gpx","~/Downloads/ATB-Heerenveen.gpx") )
+
 #
 #
 # l1 <- sf::st_linestring( x = matrix(c(0,0,1,1), ncol = 2))
@@ -43,4 +45,7 @@
 # str( sf::st_sf( geometry = sfc ))
 #
 # str( sf )
+
+
+
 

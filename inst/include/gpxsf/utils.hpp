@@ -25,7 +25,7 @@ namespace utils {
   ) {
 
     if( xml_node -> first_node( node ) ) {
-      const char* trk_name = xml_node -> first_node( node ) -> value();
+      const char* trk_name = xml_node  -> first_node( node ) -> value();
       vec.push_back( trk_name );
     } else {
       // TODO( push_back( NA_STRING ) ) -- this doesn't work

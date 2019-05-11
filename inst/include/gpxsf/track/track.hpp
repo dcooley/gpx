@@ -28,6 +28,8 @@ namespace track {
   inline void get_points(
       xml_node<> *trk_seg_node,
       Rcpp::NumericVector& bbox,
+      Rcpp::NumericVector& z_range,
+      Rcpp::NumericVector& m_range,
       std::vector< double >& lons,
       std::vector< double >& lats,
       std::vector< double >& elev,
@@ -62,12 +64,17 @@ namespace track {
       } else {
         time.push_back( NA_REAL );
       }
+
+      gpxsf::sfc::calculate_range( z_range, elev.back() );
+      gpxsf::sfc::calculate_range( m_range, time.back() );
     }
   }
 
   inline void get_segments(
       xml_node<> *trk_node,
       Rcpp::NumericVector& bbox,
+      Rcpp::NumericVector& z_range,
+      Rcpp::NumericVector& m_range,
       std::vector< double >& lons,
       std::vector< double >& lats,
       std::vector< double >& elev,
@@ -78,18 +85,25 @@ namespace track {
       trk_seg_node;
       trk_seg_node = trk_seg_node -> next_sibling()
       ) {
-      gpxsf::track::get_points( trk_seg_node, bbox, lons, lats, elev, time );
+      gpxsf::track::get_points( trk_seg_node, bbox, z_range, m_range, lons, lats, elev, time );
     }
   }
 
-  inline Rcpp::List get_track(
+
+  inline void get_track(
       xml_node<> *root_node,
+      Rcpp::List& sfc,
+      Rcpp::List& properties,
+      int& file_counter,
       int& sfg_objects,
       Rcpp::NumericVector& bbox,
-      std::string& time_format
+      Rcpp::NumericVector& z_range,
+      Rcpp::NumericVector& m_range,
+      std::string& time_format,
+      Rcpp::NumericVector& list_depths
   ) {
 
-    Rcpp::List sfc( 1 );
+    //Rcpp::List sfc( 1 );
 
     std::vector< double > lons;
     std::vector< double > lats;
@@ -108,12 +122,14 @@ namespace track {
     size_t n_trk = gpxsf::utils::xml_size( root_node, "trk" );
     Rcpp::List sfgs( n_trk );
 
+    // n_trk is the number of tracks in this file
     for(
        xml_node<> *trk_node = root_node -> first_node("trk");
        trk_node;
        trk_node = trk_node -> next_sibling()
        ) {
 
+      //Rcpp::Rcout << "loop" << std::endl;
 
       gpxsf::utils::get_optional_element( trk_node, "name", name );
       gpxsf::utils::get_optional_element( trk_node, "cmt", cmt );
@@ -125,7 +141,7 @@ namespace track {
 
       // TODO
       // every sibling must be a new LINESTRING
-      gpxsf::track::get_segments( trk_node, bbox, lons, lats, elev, time );
+      gpxsf::track::get_segments( trk_node, bbox, z_range, m_range, lons, lats, elev, time );
 
       int n = lons.size();
 
@@ -157,9 +173,12 @@ namespace track {
       trk_counter++;
       sfg_objects++;
     }
-    sfc[0] = sfgs;
+    //sfc[0] = sfgs;
+    sfc[ file_counter ] = sfgs;
+    list_depths[ file_counter ] = trk_counter;
 
     Rcpp::StringVector sv_name = Rcpp::wrap( name );
+    //Rcpp::Rcout << "name: " << sv_name << std::endl;
     Rcpp::StringVector sv_cmt = Rcpp::wrap( cmt );
     Rcpp::StringVector sv_desc = Rcpp::wrap( desc );
     Rcpp::StringVector sv_src = Rcpp::wrap( src );
@@ -167,7 +186,30 @@ namespace track {
     Rcpp::NumericVector nv_number = Rcpp::wrap( number );
     Rcpp::StringVector sv_type = Rcpp::wrap( type );
 
-    return sfc;
+    Rcpp::List lst_properties = Rcpp::List::create(
+      _["name"] = sv_name,
+      _["cmt"] = cmt,
+      _["desc"] = desc,
+      _["src"] = src,
+      _["link"] = link,
+      _["number"] = number,
+      _["type"] = type
+    );
+
+    properties[ file_counter ] = lst_properties;
+
+    // TODO
+    // construct SF
+    /*
+    Rcpp::List sf = Rcpp::List::create(
+      _["geometry"] = sfgs,
+      _["track_name"] = sv_name
+    );
+
+    return sf;
+    */
+
+    //return sfc;
   }
 
 

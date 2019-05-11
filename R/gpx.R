@@ -43,7 +43,7 @@ gpx_sf.character <- function( gpx, time_return = c("datetime", "counter", "norma
 
   time_return <- match.arg( time_return )
 
-  if( file.exists( gpx ) ) {
+  if( all( file.exists( gpx ) ) ) { ## TODO: move this check to cpp
     return( rcpp_gpx_to_sf( normalizePath( gpx ), time_return ) )
   } else {
     stop("Can't find the gpx file")
