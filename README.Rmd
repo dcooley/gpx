@@ -5,18 +5,19 @@ output: github_document
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "#",
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
 ```
 
-# What is gpxsf?
+## What is gpxsf?
 
-Very simple package which converts GPX files to `sf` objects. 
+Very simple package which converts [GPX](https://www.topografix.com/GPX/1/1/) files to `sf` objects. 
 
 
 ```{r}
+library(gpxsf)
 library(sf) ## for print methods of sf objects
 gpx <- system.file("./gpx/city_trail.gpx", package = "gpxsf")
 sf <- gpxsf::gpx_sf( gpx )
@@ -37,8 +38,38 @@ mapdeck() %>%
 
 ```
 
-### documentation notes
+## How are timestamps handled?
 
-https://www.topografix.com/GPX/1/1/#type_trkType
+The timestamp can specified as one of
+
+- datetime (default) - the numeric representation of POSIX dates
+- counter - every track starts from 0 and counts to the maximum time
+- normalise - every track's time is rescaled to be [0,1]
+
+Here are some examples
+
+```{r}
+
+sf_time <- gpx_sf( gpx, time = "datetime" )
+sf_count <- gpx_sf( gpx, time = "counter" )
+sf_norm <- gpx_sf( gpx, time = "normalise" )
+
+options(digits = 12)
+
+track_time <- unclass( sf_time[, "geometry"][[1]][[1]] )
+head( track_time )
+summary( track_time[, 4] )
+
+track_count <- unclass( sf_count[, "geometry"][[1]][[1]] )
+head( track_count )
+summary( track_count[, 4] )
+
+track_norm <- unclass( sf_norm[, "geometry"][[1]][[1]] )
+head( track_norm )
+summary( track_norm[, 4] )
+
+options(digits = 7)
+```
+
 
 

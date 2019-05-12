@@ -4,12 +4,12 @@
 \alias{gpx_sf}
 \title{gpx sf}
 \usage{
-gpx_sf(gpx, time_return = c("datetime", "counter", "normalise"))
+gpx_sf(gpx, time = c("datetime", "counter", "normalise"))
 }
 \arguments{
 \item{gpx}{path to gpx files}
 
-\item{time_return}{the format of the time element returned to the sf object.
+\item{time}{the format of the timestamp element returned to the sf object.
 One of datetime, counter or normalise. See Details}
 }
 \value{
@@ -19,7 +19,7 @@ One of datetime, counter or normalise. See Details}
 Converts GPX files to simple feature objects.
 }
 \details{
-Use \code{time_format} to specify how to handle the time component of the GPX file (if available)
+Use \code{time} to specify how to handle the time component of the GPX file (if available)
 
 \itemize{
   \item{datetime - numeric representation of the date }

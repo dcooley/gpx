@@ -3,14 +3,14 @@
 #' Converts GPX files to simple feature objects.
 #'
 #' @param gpx path to gpx files
-#' @param time_return the format of the time element returned to the sf object.
+#' @param time the format of the timestamp element returned to the sf object.
 #' One of datetime, counter or normalise. See Details
 #'
 #' @return \code{sf} object wtih XYZM dimensions
 #'
 #' @details
 #'
-#' Use \code{time_format} to specify how to handle the time component of the GPX file (if available)
+#' Use \code{time} to specify how to handle the time component of the GPX file (if available)
 #'
 #' \itemize{
 #'   \item{datetime - numeric representation of the date }
@@ -34,17 +34,17 @@
 #' # sf
 #'
 #' @export
-gpx_sf <- function( gpx, time_return = c("datetime","counter","normalise") ) {
+gpx_sf <- function( gpx, time = c("datetime","counter","normalise") ) {
   UseMethod("gpx_sf")
 }
 
 #' @export
-gpx_sf.character <- function( gpx, time_return = c("datetime", "counter", "normalise")) {
+gpx_sf.character <- function( gpx, time = c("datetime", "counter", "normalise")) {
 
-  time_return <- match.arg( time_return )
+  time <- match.arg( time )
 
   if( all( file.exists( gpx ) ) ) { ## TODO: move this check to cpp
-    return( rcpp_gpx_to_sf( normalizePath( gpx ), time_return ) )
+    return( rcpp_gpx_to_sf( normalizePath( gpx ), time ) )
   } else {
     stop("Can't find the gpx file")
   }
