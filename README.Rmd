@@ -19,7 +19,7 @@ Very simple package which converts [GPX](https://www.topografix.com/GPX/1/1/) fi
 ```{r}
 library(gpxsf)
 library(sf) ## for print methods of sf objects
-gpx <- system.file("./gpx/city_trail.gpx", package = "gpxsf")
+gpx <- system.file("gpx/city_trail.gpx", package = "gpxsf")
 sf <- gpxsf::gpx_sf( gpx )
 
 sf
@@ -33,8 +33,18 @@ However, the real benefit, and the reason I built this package, is so we can plo
 ```{r, eval = FALSE, echo = FALSE}
 library(mapdeck)
 
-mapdeck() %>% 
-  add_trips()
+set_token( read.dcf("~/Documents/.googleAPI",fields = "MAPBOX"))
+
+sf <- gpxsf::gpx_sf( gpx, time = "counter" )
+
+mapdeck(
+  	style = mapdeck_style("dark")
+	, location = c(145., -37.8)
+	, zoom = 10
+) %>% 
+  add_trips(
+    data = sf
+  )
 
 ```
 
@@ -54,21 +64,25 @@ sf_time <- gpx_sf( gpx, time = "datetime" )
 sf_count <- gpx_sf( gpx, time = "counter" )
 sf_norm <- gpx_sf( gpx, time = "normalise" )
 
+d <- getOption("digits")
 options(digits = 12)
 
 track_time <- unclass( sf_time[, "geometry"][[1]][[1]] )
 head( track_time )
+
 summary( track_time[, 4] )
 
 track_count <- unclass( sf_count[, "geometry"][[1]][[1]] )
 head( track_count )
+
 summary( track_count[, 4] )
 
 track_norm <- unclass( sf_norm[, "geometry"][[1]][[1]] )
 head( track_norm )
+
 summary( track_norm[, 4] )
 
-options(digits = 7)
+options(digits = d)
 ```
 
 

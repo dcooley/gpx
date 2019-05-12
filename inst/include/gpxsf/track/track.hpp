@@ -155,8 +155,10 @@ namespace track {
       // datetime - default
       if( time_format == "counter" ) {
         gpxsf::counter::counter( nv_time );
+        gpxsf::counter::counter( m_range );
       } else if ( time_format == "normalise" ) {
         gpxsf::scale::rescale( nv_time );
+        gpxsf::scale::rescale( m_range );
       }
 
       // I'm making it a XYZM object

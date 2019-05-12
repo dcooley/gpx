@@ -47,6 +47,7 @@ sf_time <- gpx_sf( gpx, time = "datetime" )
 sf_count <- gpx_sf( gpx, time = "counter" )
 sf_norm <- gpx_sf( gpx, time = "normalise" )
 
+d <- getOption("digits")
 options(digits = 12)
 
 track_time <- unclass( sf_time[, "geometry"][[1]][[1]] )
@@ -58,6 +59,7 @@ head( track_time )
 # [4,] 144.999874 -37.845010 21.2 1499569163
 # [5,] 144.999931 -37.844929 20.9 1499569164
 # [6,] 144.999853 -37.844893 20.7 1499569165
+
 summary( track_time[, 4] )
 #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
 # 1499569160 1499570978 1499573624 1499574804 1499578474 1499581021
@@ -71,6 +73,7 @@ head( track_count )
 # [4,] 144.999874 -37.845010 21.2    3
 # [5,] 144.999931 -37.844929 20.9    4
 # [6,] 144.999853 -37.844893 20.7    5
+
 summary( track_count[, 4] )
 #        Min.     1st Qu.      Median        Mean     3rd Qu.        Max. 
 #     0.00000  1818.00000  4464.00000  5644.41681  9314.00000 11861.00000
@@ -84,9 +87,10 @@ head( track_norm )
 # [4,] 144.999874 -37.845010 21.2 0.000252929769834
 # [5,] 144.999931 -37.844929 20.9 0.000337239693112
 # [6,] 144.999853 -37.844893 20.7 0.000421549616390
+
 summary( track_norm[, 4] )
 #        Min.     1st Qu.      Median        Mean     3rd Qu.        Max. 
 # 0.000000000 0.153275441 0.376359498 0.475880348 0.785262625 1.000000000
 
-options(digits = 7)
+options(digits = d)
 ```

@@ -1,5 +1,5 @@
-
-
+#
+#
 # fp <- path.expand("~/Documents/Data/Strava/Bethan/activities/")
 # l <- list.files(fp, patter = "gpx$")
 #
@@ -7,7 +7,26 @@
 #
 # library(sf)
 #
-# sf <- gpxsf::gpx_sf( gpx[1:3] )
+# sf <- gpxsf::gpx_sf( gpx[1:10], time = "counter" )
+#
+#
+# library(mapdeck)
+#
+# set_token( read.dcf("~/Documents/.googleAPI", fields = "MAPBOX"))
+#
+# mapdeck(
+# 	style = mapdeck_style("dark")
+# 	, location = c(144.5, -37.9)
+# 	, zoom = 8
+# 	) %>%
+# 	add_trips(
+# 		data = sf
+# 		, loop_length = 11861
+# 		, animation_speed = 200
+# 		, stroke_colour = "#FFFFFF"
+# 	)
+
+
 
 # library(plotKML)
 #
