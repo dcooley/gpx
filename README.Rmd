@@ -11,18 +11,34 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gpxsf
+# What is gpxsf?
+
+Very simple package which converts GPX files to `sf` objects. 
+
 
 ```{r}
+library(sf) ## for print methods of sf objects
+gpx <- system.file("./gpx/city_trail.gpx", package = "gpxsf")
+sf <- gpxsf::gpx_sf( gpx )
 
+sf
 
 ```
 
+And that's it.
+
+However, the real benefit, and the reason I built this package, is so we can plot them in mapdeck's trip layer
+
+```{r, eval = FALSE, echo = FALSE}
+library(mapdeck)
+
+mapdeck() %>% 
+  add_trips()
+
+```
 
 ### documentation notes
 
 https://www.topografix.com/GPX/1/1/#type_trkType
 
-**ele** (optional) in metres
-**time** (optional) in ISO 8601
-https://www.topografix.com/gpx_manual.asp#time
+
