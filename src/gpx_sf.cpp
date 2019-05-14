@@ -40,7 +40,6 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   int file_counter;
   int sfg_objects = 0;
 
-  //Rcpp::List sf( 1 );
   Rcpp::List sfc( n );
   Rcpp::List properties( n );
   Rcpp::NumericVector list_depths( n );
@@ -48,6 +47,18 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   Rcpp::NumericVector bbox = gpxsf::sfc::start_bbox();
   Rcpp::NumericVector z_range = gpxsf::sfc::start_range();
   Rcpp::NumericVector m_range = gpxsf::sfc::start_range();
+
+  // keep track of which columns to include
+  Rcpp::DataFrame df_cols = Rcpp::DataFrame::create(
+    _["name"] = false,
+    _["comment"] = false,
+    _["description"] = false,
+    _["source"] = false,
+    _["link"] = false,
+    _["number"] = false,
+    _["type"] = false,
+    _["geometry"] = true
+  );
 
   // loop over each gpx file
   for( file_counter = 0; file_counter < n; file_counter++ ) {
@@ -70,11 +81,14 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     //sfc[i] = gpxsf::track::get_track( root_node, sfc, properties, file_counter, sfg_objects, bbox, z_range, m_range, time_format );
     gpxsf::track::get_track(
       root_node, sfc, properties, file_counter, sfg_objects,
-      bbox, z_range, m_range, time_format, list_depths );
+      bbox, z_range, m_range, time_format, list_depths, df_cols );
   }
+
+  //return df_cols;
 
   Rcpp::List res = gpxsf::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
 
+  //return res;
 
   //Rcpp::Rcout << "returned to main" << std::endl;
 
@@ -118,6 +132,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     track_counter++;
   }
 
+
   Rcpp::DataFrame sf = Rcpp::DataFrame::create(
     _["name"] = track_names,
     _["comment"] = track_comments,
@@ -128,6 +143,13 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     _["type"] = track_types,
     _["geometry"] = res
   );
+
+  // TODO - remove 'property' cols which are 'false' in df_cols
+  //Rcpp::LogicalVector lv = Rcpp::as< Rcpp::LogicalVector >( df_cols );
+  //Rcpp::Rcout << "lv sum: " << Rcpp::sum( lv ) << std::endl;
+
+  //return df_cols;
+
 
   sf.attr("sf_column") = "geometry";
   sf.attr("class") = Rcpp::CharacterVector::create("sf", "data.frame");

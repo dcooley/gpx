@@ -21,12 +21,14 @@ namespace utils {
   inline void get_optional_element(
       rapidxml::xml_node<> * xml_node,
       const char* node,
-      std::vector< std::string >& vec
+      std::vector< std::string >& vec,
+      Rcpp::DataFrame& df_cols
   ) {
 
     if( xml_node -> first_node( node ) ) {
       const char* trk_name = xml_node  -> first_node( node ) -> value();
       vec.push_back( trk_name );
+      df_cols[ node ] = true;
     } else {
       // TODO( push_back( NA_STRING ) ) -- this doesn't work
       vec.push_back( "" );
@@ -37,12 +39,14 @@ namespace utils {
   inline void get_optional_element(
       rapidxml::xml_node<> * xml_node,
       const char* node,
-      std::vector< double >& vec
+      std::vector< double >& vec,
+      Rcpp::DataFrame& df_cols
   ) {
 
     if( xml_node -> first_node( node ) ) {
       const char* trk_name = xml_node -> first_node( node ) -> value();
       vec.push_back( atof( trk_name ) );
+      df_cols[ node ] = true;
     } else {
       vec.push_back( NA_REAL );
     }
