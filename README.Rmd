@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## What is gpxsf?
+## What is gpx?
 
 Very simple package which converts [GPX](https://www.topografix.com/GPX/1/1/) files to `sf` objects. 
 
@@ -85,5 +85,39 @@ summary( track_norm[, 4] )
 options(digits = d)
 ```
 
+### Surely there's something else?
 
+Oh yes, it's quite quick too!
+
+This example compares reading 364 gpx files using this library, compared to reading a single gpx file using `library(plotKML)`
+
+```{r, eval = FALSE}
+
+library(plotKML)
+library(microbenchmark)
+
+fp <- path.expand(".../.../")
+l <- list.files(fp, patter = "gpx$")
+
+gpx <- paste0(fp, l)
+
+length( gpx )
+# 364
+
+microbenchmark::microbenchmark(
+  gpx = {
+    sf <- gpx:::rcpp_gpx_to_sf( gpx, time = "default" )
+  },
+  kml = {
+    kml <- plotKML::readGPX( gpx[1] )
+  },
+  times = 1
+)
+
+# Unit: seconds
+#  expr      min       lq     mean   median       uq      max neval
+#   gpx 5.450537 5.450537 5.450537 5.450537 5.450537 5.450537     1
+#   kml 4.036555 4.036555 4.036555 4.036555 4.036555 4.036555     1
+
+```
 

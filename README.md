@@ -5,14 +5,14 @@ Very simple package which converts
 [GPX](https://www.topografix.com/GPX/1/1/) files to `sf` objects.
 
 ``` r
-library(gpx)
+library(gpxsf)
 library(sf) ## for print methods of sf objects
 # Linking to GEOS 3.7.1, GDAL 2.4.1, PROJ 6.0.0
-gpx <- system.file("./gpx/city_trail.gpx", package = "gpx")
-sf <- gpx::gpx_sf( gpx )
+gpx <- system.file("gpx/city_trail.gpx", package = "gpxsf")
+sf <- gpxsf::gpx_sf( gpx )
 
 sf
-# Simple feature collection with 1 feature and 7 fields
+# Simple feature collection with 1 feature and 2 fields
 # geometry type:  LINESTRING
 # dimension:      XYZM
 # bbox:           xmin: 144.9356 ymin: -37.84586 xmax: 145.0274 ymax: -37.77897
@@ -20,10 +20,8 @@ sf
 # m_range:        mmin: 1499569000 mmax: 1499581000
 # epsg (SRID):    4326
 # proj4string:    +proj=longlat +datum=WGS84 +no_defs
-#                                  name comment description source link
-# 1 Sunday afternoon Capital City trail                                
-#   number type                       geometry
-# 1     NA    1 LINESTRING ZM (144.9998 -37...
+#                                  name type                       geometry
+# 1 Sunday afternoon Capital City trail    1 LINESTRING ZM (144.9998 -37...
 ```
 
 And that’s it.
@@ -93,4 +91,40 @@ summary( track_norm[, 4] )
 # 0.000000000 0.153275441 0.376359498 0.475880348 0.785262625 1.000000000
 
 options(digits = d)
+```
+
+### Surely there’s something else?
+
+Oh yes, it’s quite quick too\!
+
+This example compares reading 364 gpx files using this library, compared
+to reading a single gpx file using `library(plotKML)`
+
+``` r
+
+library(plotKML)
+library(microbenchmark)
+
+fp <- path.expand(".../.../")
+l <- list.files(fp, patter = "gpx$")
+
+gpx <- paste0(fp, l)
+
+length( gpx )
+# 364
+
+microbenchmark::microbenchmark(
+  gpx = {
+    sf <- gpx:::rcpp_gpx_to_sf( gpx, time = "default" )
+  },
+  kml = {
+    kml <- plotKML::readGPX( gpx[1] )
+  },
+  times = 1
+)
+
+# Unit: seconds
+#  expr      min       lq     mean   median       uq      max neval
+#   gpx 5.450537 5.450537 5.450537 5.450537 5.450537 5.450537     1
+#   kml 4.036555 4.036555 4.036555 4.036555 4.036555 4.036555     1
 ```
