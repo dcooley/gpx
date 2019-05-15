@@ -1,10 +1,10 @@
-#ifndef GPXSF_SFC_H
-#define GPXSF_SFC_H
+#ifndef R_GPX_SFC_H
+#define R_GPX_SFC_H
 
 #include <Rcpp.h>
-#include "gpxsf/gpxsf.hpp"
+#include "gpx/gpx.hpp"
 
-namespace gpxsf {
+namespace gpx {
 namespace sfc {
 
   inline Rcpp::NumericVector start_bbox() {
@@ -49,8 +49,8 @@ namespace sfc {
 
     // attribute::crs
     Rcpp::List crs = Rcpp::List::create(
-      Rcpp::Named("epsg") = gpxsf::EPSG,
-      Rcpp::Named("proj4string") = gpxsf::PROJ4STRING
+      Rcpp::Named("epsg") = gpx::EPSG,
+      Rcpp::Named("proj4string") = gpx::PROJ4STRING
     );
 
     crs.attr("class") = Rcpp::CharacterVector::create("crs");

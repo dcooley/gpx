@@ -1,9 +1,9 @@
-#ifndef GPXSF_RAPIDXML_UTILS_H
-#define GPXSF_RAPIDXML_UTILS_H
+#ifndef R_GPX_RAPIDXML_UTILS_H
+#define R_GPX_RAPIDXML_UTILS_H
 
 #include <rapidxml.hpp>
 
-namespace gpxsf {
+namespace gpx {
 namespace utils {
 
   inline std::size_t xml_size(rapidxml::xml_node<> *outer_node, const char* node) {
@@ -54,6 +54,6 @@ namespace utils {
   }
 
 } // utils
-} // gpxsf
+} // gpx
 
 #endif

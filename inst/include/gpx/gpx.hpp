@@ -1,7 +1,7 @@
-#ifndef GPXSF_H
-#define GPXSF_H
+#ifndef R_GPX_H
+#define R_GPX_H
 
-namespace gpxsf {
+namespace gpx {
   const int EPSG = 4326;
   const std::string PROJ4STRING = "+proj=longlat +datum=WGS84 +no_defs";
 }

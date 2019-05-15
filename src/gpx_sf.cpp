@@ -3,11 +3,10 @@
 #include <fstream>
 #include <rapidxml.hpp>
 
-#include "gpxsf/track/track.hpp"
+#include "gpx/track/track.hpp"
 
-#include "gpxsf/sf/sfg.hpp"
-#include "gpxsf/sf/sfc.hpp"
-#include "gpxsf/sf/sf.hpp"
+#include "gpx/sf/sfg.hpp"
+#include "gpx/sf/sfc.hpp"
 
 #include <Rcpp.h>
 
@@ -44,9 +43,9 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   Rcpp::List properties( n );
   Rcpp::NumericVector list_depths( n );
 
-  Rcpp::NumericVector bbox = gpxsf::sfc::start_bbox();
-  Rcpp::NumericVector z_range = gpxsf::sfc::start_range();
-  Rcpp::NumericVector m_range = gpxsf::sfc::start_range();
+  Rcpp::NumericVector bbox = gpx::sfc::start_bbox();
+  Rcpp::NumericVector z_range = gpx::sfc::start_range();
+  Rcpp::NumericVector m_range = gpx::sfc::start_range();
 
   // keep track of which columns to include
   Rcpp::DataFrame df_cols = Rcpp::DataFrame::create(
@@ -78,15 +77,15 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     root_node = doc.first_node("gpx");
 
     // there can be many tracks per gpx file
-    //sfc[i] = gpxsf::track::get_track( root_node, sfc, properties, file_counter, sfg_objects, bbox, z_range, m_range, time_format );
-    gpxsf::track::get_track(
+    //sfc[i] = gpx::track::get_track( root_node, sfc, properties, file_counter, sfg_objects, bbox, z_range, m_range, time_format );
+    gpx::track::get_track(
       root_node, sfc, properties, file_counter, sfg_objects,
       bbox, z_range, m_range, time_format, list_depths, df_cols );
   }
 
   //return df_cols;
 
-  Rcpp::List res = gpxsf::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
+  Rcpp::List res = gpx::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
 
   //return res;
 

@@ -1,4 +1,4 @@
 library(testthat)
 library(gpxsf)
 
-test_check("gpxsf")
+test_check("gpx")

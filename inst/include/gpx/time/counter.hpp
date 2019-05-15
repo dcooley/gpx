@@ -1,9 +1,9 @@
-#ifndef GPXSF_TIME_COUNTER_H
-#define GPXSF_TIME_COUNTER_H
+#ifndef R_GPX_TIME_COUNTER_H
+#define R_GPX_TIME_COUNTER_H
 
 #include <Rcpp.h>
 
-namespace gpxsf {
+namespace gpx {
 namespace counter {
 
   inline void counter( Rcpp::NumericVector& x ) {
@@ -12,6 +12,6 @@ namespace counter {
   }
 
 }
-} // gpxsf
+} // gpx
 
 #endif

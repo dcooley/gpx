@@ -33,7 +33,7 @@ Times are assumed to be in UTC and conforming to ISO 8601, as per the specificat
 }
 \examples{
 
-f <- system.file("data/run.gpx", package = "gpxsf")
+f <- system.file("data/run.gpx", package = "gpx")
 sf <- gpx_sf( f )
 str( sf )
 

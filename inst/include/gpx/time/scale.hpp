@@ -1,9 +1,9 @@
-#ifndef GPXSF_TIME_SCALE_H
-#define GPXSF_TIME_SCALE_H
+#ifndef R_GPX_TIME_SCALE_H
+#define R_GPX_TIME_SCALE_H
 
 #include <Rcpp.h>
 
-namespace gpxsf {
+namespace gpx {
 namespace scale {
 
   inline Rcpp::NumericVector minmax( Rcpp::NumericVector& x ) {
@@ -52,6 +52,6 @@ namespace scale {
   }
 
 } // scale
-} // gpxsf
+} // gpx
 
 #endif

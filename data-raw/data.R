@@ -4,7 +4,7 @@
 #
 #
 #
-# sf <- gpx_sf( system.file("./gpx/city_trail.gpx", package = "gpxsf") )
+# sf <- gpx_sf( system.file("./gpx/city_trail.gpx", package = "gpx") )
 #
 # mapdeck() %>%
 #   add_sf(
