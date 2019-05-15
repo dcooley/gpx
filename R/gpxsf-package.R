@@ -1,3 +1,3 @@
-#' @useDynLib gpxsf, .registration = TRUE
+#' @useDynLib gpx, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 NULL

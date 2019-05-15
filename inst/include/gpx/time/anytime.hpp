@@ -1,5 +1,5 @@
-#ifndef GPXSF_TIME_ANYTIME_H
-#define GPXSF_TIME_ANYTIME_H
+#ifndef R_GPX_TIME_ANYTIME_H
+#define R_GPX_TIME_ANYTIME_H
 
 // anytime.hpp uses code from Dirk Eddelbuettel's anytime library, specifically anytime.cpp
 // https://github.com/eddelbuettel/anytime/blob/master/src/anytime.cpp
@@ -48,7 +48,7 @@ public:
 
 static TimeFormats timeformats;
 
-namespace gpxsf {
+namespace gpx {
 namespace anytime {
 
   // https://github.com/eddelbuettel/anytime/blob/master/src/anytime.cpp#L184
@@ -84,7 +84,7 @@ namespace anytime {
   }
 
 } // namespace anytime
-} // namespace gpxsf
+} // namespace gpx
 
 
 #endif

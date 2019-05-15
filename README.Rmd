@@ -5,24 +5,85 @@ output: github_document
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "#",
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
 ```
 
-# gpxsf
+## What is gpxsf?
+
+Very simple package which converts [GPX](https://www.topografix.com/GPX/1/1/) files to `sf` objects. 
+
 
 ```{r}
+library(gpxsf)
+library(sf) ## for print methods of sf objects
+gpx <- system.file("gpx/city_trail.gpx", package = "gpxsf")
+sf <- gpxsf::gpx_sf( gpx )
 
+sf
 
 ```
 
+And that's it.
 
-### documentation notes
+However, the real benefit, and the reason I built this package, is so we can plot them in mapdeck's trip layer
 
-https://www.topografix.com/GPX/1/1/#type_trkType
+```{r, eval = FALSE, echo = FALSE}
+library(mapdeck)
 
-**ele** (optional) in metres
-**time** (optional) in ISO 8601
-https://www.topografix.com/gpx_manual.asp#time
+set_token( read.dcf("~/Documents/.googleAPI",fields = "MAPBOX"))
+
+sf <- gpxsf::gpx_sf( gpx, time = "counter" )
+
+mapdeck(
+  	style = mapdeck_style("dark")
+	, location = c(145., -37.8)
+	, zoom = 10
+) %>% 
+  add_trips(
+    data = sf
+  )
+
+```
+
+## How are timestamps handled?
+
+The timestamp can specified as one of
+
+- datetime (default) - the numeric representation of POSIX dates
+- counter - every track starts from 0 and counts to the maximum time
+- normalise - every track's time is rescaled to be [0,1]
+
+Here are some examples
+
+```{r}
+
+sf_time <- gpx_sf( gpx, time = "datetime" )
+sf_count <- gpx_sf( gpx, time = "counter" )
+sf_norm <- gpx_sf( gpx, time = "normalise" )
+
+d <- getOption("digits")
+options(digits = 12)
+
+track_time <- unclass( sf_time[, "geometry"][[1]][[1]] )
+head( track_time )
+
+summary( track_time[, 4] )
+
+track_count <- unclass( sf_count[, "geometry"][[1]][[1]] )
+head( track_count )
+
+summary( track_count[, 4] )
+
+track_norm <- unclass( sf_norm[, "geometry"][[1]][[1]] )
+head( track_norm )
+
+summary( track_norm[, 4] )
+
+options(digits = d)
+```
+
+
+

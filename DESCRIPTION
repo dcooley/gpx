@@ -1,4 +1,4 @@
-Package: gpxsf
+Package: gpx
 Type: Package
 Title: Converts GPX Files to Simple Features
 Version: 0.1.0
@@ -17,3 +17,5 @@ LinkingTo:
     Rcpp
 Imports:
     Rcpp
+Suggests: 
+    testthat

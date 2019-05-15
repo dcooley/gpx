@@ -1,9 +1,9 @@
-#ifndef GPXSF_SFG_H
-#define GPXSF_SFG_H
+#ifndef R_GPX_SFG_H
+#define R_GPX_SFG_H
 
 #include <Rcpp.h>
 
-namespace gpxsf {
+namespace gpx {
 namespace sfg {
 
   inline Rcpp::CharacterVector sfg_attributes( std::string& dimension, std::string& geom_type ) {
@@ -11,6 +11,6 @@ namespace sfg {
   }
 
 } // sf
-} // gpxsf
+} // gpx
 
 #endif

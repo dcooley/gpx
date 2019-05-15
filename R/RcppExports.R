@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcpp_gpx_to_sf <- function(gpx_files, time_format) {
-    .Call(`_gpxsf_rcpp_gpx_to_sf`, gpx_files, time_format)
+    .Call(`_gpx_rcpp_gpx_to_sf`, gpx_files, time_format)
 }
 
