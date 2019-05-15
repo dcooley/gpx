@@ -27,7 +27,7 @@
 # 	)
 
 
-
+#
 # library(plotKML)
 #
 # library(microbenchmark)
@@ -47,7 +47,7 @@
 #   },
 #   times = 1
 # )
-#
+
 
 # sf <- gpxsf::gpx_sf( "~/Downloads/ATB-Heerenveen.gpx")
 

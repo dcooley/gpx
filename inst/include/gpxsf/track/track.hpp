@@ -8,7 +8,6 @@
 
 #include "gpxsf/utils.hpp"
 
-
 #include "gpxsf/time/scale.hpp"
 #include "gpxsf/time/counter.hpp"
 
@@ -67,7 +66,8 @@ namespace track {
       }
 
       gpxsf::sfc::calculate_range( z_range, elev.back() );
-      gpxsf::sfc::calculate_range( m_range, time.back() );
+      // m_range is done AFTER scaling
+      //gpxsf::sfc::calculate_range( m_range, time.back() );
     }
   }
 
@@ -105,8 +105,6 @@ namespace track {
       Rcpp::NumericVector& list_depths,
       Rcpp::DataFrame& df_cols
   ) {
-
-    //Rcpp::List sfc( 1 );
 
     std::vector< double > lons;
     std::vector< double > lats;
@@ -154,11 +152,16 @@ namespace track {
       // datetime - default
       if( time_format == "counter" ) {
         gpxsf::counter::counter( nv_time );
-        gpxsf::counter::counter( m_range );
       } else if ( time_format == "normalise" ) {
         gpxsf::scale::rescale( nv_time );
-        gpxsf::scale::rescale( m_range );
       }
+
+      // Need to calcualte the time (m) ranges AFTER scaling the time
+      double min_time = Rcpp::min( nv_time );
+      double max_time = Rcpp::max( nv_time );
+
+      gpxsf::sfc::calculate_range( m_range, min_time );
+      gpxsf::sfc::calculate_range( m_range, max_time );
 
       // I'm making it a XYZM object
       Rcpp::NumericMatrix linestring( n, 4 );
@@ -174,12 +177,11 @@ namespace track {
       trk_counter++;
       sfg_objects++;
     }
-    //sfc[0] = sfgs;
+
     sfc[ file_counter ] = sfgs;
     list_depths[ file_counter ] = trk_counter;
 
     Rcpp::StringVector sv_name = Rcpp::wrap( name );
-    //Rcpp::Rcout << "name: " << sv_name << std::endl;
     Rcpp::StringVector sv_cmt = Rcpp::wrap( cmt );
     Rcpp::StringVector sv_desc = Rcpp::wrap( desc );
     Rcpp::StringVector sv_src = Rcpp::wrap( src );
@@ -197,22 +199,7 @@ namespace track {
       _["type"] = type
     );
 
-    // TODO - remove elements which are 'false' in df_cols
-
     properties[ file_counter ] = lst_properties;
-
-    // TODO
-    // construct SF
-    /*
-    Rcpp::List sf = Rcpp::List::create(
-      _["geometry"] = sfgs,
-      _["track_name"] = sv_name
-    );
-
-    return sf;
-    */
-
-    //return sfc;
   }
 
 

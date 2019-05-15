@@ -28,12 +28,12 @@ namespace sfc {
     bbox[3] = std::max(lat, bbox[3]);
   }
 
+
   inline void calculate_range(Rcpp::NumericVector& rnge, double& val) {
     //xmin, ymin, xmax, ymax
     rnge[0] = std::min(val, rnge[0]);
     rnge[1] = std::max(val, rnge[1]);
   }
-
 
   inline void attach_sfc_attributes(
       Rcpp::List& sfc,

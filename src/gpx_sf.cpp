@@ -132,7 +132,54 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     track_counter++;
   }
 
+  int n_cols = 0;
+  Rcpp::StringVector df_col_names = df_cols.names();
 
+  for( int i = 0; i < df_cols.ncol(); i++ ) {
+    const char * this_col = df_col_names[i];
+    Rcpp::LogicalVector lv = df_cols[ this_col ];
+    bool keep_col = lv[0];
+    if( keep_col == true && strcmp( this_col , "ele" ) != 0) {  // not including ele or time
+      n_cols++;
+    }
+  }
+
+  Rcpp::List sf( n_cols );
+  Rcpp::StringVector sf_names( n_cols );
+  int col_index = 0;
+
+  for( int i = 0; i < df_cols.ncol(); i++ ) {
+    const char * this_col = df_col_names[i];
+    Rcpp::LogicalVector lv = df_cols[ this_col ];
+    bool keep_col = lv[0];
+
+    if( keep_col == true & strcmp( this_col, "ele" ) != 0 ) {
+      sf_names[col_index] = this_col;
+      if( strcmp( this_col, "name" ) == 0 ) {
+        sf[col_index] = track_names;
+      } else if ( strcmp( this_col, "comment" ) == 0 ) {
+        sf[col_index] = track_comments;
+      } else if ( strcmp( this_col, "description" ) == 0 ) {
+        sf[col_index] = track_descriptions;
+      } else if ( strcmp( this_col, "source" ) == 0 ) {
+        sf[col_index] = track_sources;
+      } else if ( strcmp( this_col, "link" ) == 0 ) {
+        sf[col_index] = track_links;
+      } else if ( strcmp( this_col, "number" ) == 0 ) {
+        sf[col_index] = track_numbers;
+      } else if ( strcmp( this_col, "type" ) == 0 ) {
+        sf[col_index] = track_types;
+      }
+      col_index++;
+    }
+  }
+
+  sf.names() = sf_names;
+
+  sf[ "geometry" ] = res;
+
+
+  /*
   Rcpp::DataFrame sf = Rcpp::DataFrame::create(
     _["name"] = track_names,
     _["comment"] = track_comments,
@@ -143,12 +190,14 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     _["type"] = track_types,
     _["geometry"] = res
   );
+  */
 
-  // TODO - remove 'property' cols which are 'false' in df_cols
-  //Rcpp::LogicalVector lv = Rcpp::as< Rcpp::LogicalVector >( df_cols );
-  //Rcpp::Rcout << "lv sum: " << Rcpp::sum( lv ) << std::endl;
-
-  //return df_cols;
+  if (sfg_objects > 0 ) {
+    Rcpp::IntegerVector nv = Rcpp::seq( 1, sfg_objects );
+    sf.attr("row.names") = nv;
+  } else {
+    sf.attr("row.names") = Rcpp::IntegerVector(0);
+  }
 
 
   sf.attr("sf_column") = "geometry";
