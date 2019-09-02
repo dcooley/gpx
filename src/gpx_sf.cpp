@@ -5,8 +5,10 @@
 
 #include "gpx/track/track.hpp"
 
-#include "gpx/sf/sfg.hpp"
-#include "gpx/sf/sfc.hpp"
+// #include "gpx/sf/sfg.hpp"
+// #include "gpx/sf/sfc.hpp"
+
+#include "sfheaders/sfc/sfc_types.hpp"
 
 #include <Rcpp.h>
 
@@ -43,9 +45,10 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   Rcpp::List properties( n );
   Rcpp::NumericVector list_depths( n );
 
-  Rcpp::NumericVector bbox = gpx::sfc::start_bbox();
-  Rcpp::NumericVector z_range = gpx::sfc::start_range();
-  Rcpp::NumericVector m_range = gpx::sfc::start_range();
+
+  Rcpp::NumericVector bbox = sfheaders::bbox::start_bbox();
+  Rcpp::NumericVector z_range = sfheaders::zm::start_z_range();
+  Rcpp::NumericVector m_range = sfheaders::zm::start_m_range();
 
   // keep track of which columns to include
   Rcpp::DataFrame df_cols = Rcpp::DataFrame::create(
@@ -62,6 +65,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   // loop over each gpx file
   for( file_counter = 0; file_counter < n; file_counter++ ) {
 
+    Rcpp::List this_track;
     std::string f = gpx_files[ file_counter ];
     std::ifstream theFile( f );
 
@@ -77,15 +81,21 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     root_node = doc.first_node("gpx");
 
     // there can be many tracks per gpx file
-    //sfc[i] = gpx::track::get_track( root_node, sfc, properties, file_counter, sfg_objects, bbox, z_range, m_range, time_format );
+    // sfc[file_counter] = gpx::track::get_track(
+    //   root_node, sfc, properties, file_counter, sfg_objects,
+    //     bbox, z_range, m_range, time_format, list_depths, df_cols
+    //   );
     gpx::track::get_track(
       root_node, sfc, properties, file_counter, sfg_objects,
-      bbox, z_range, m_range, time_format, list_depths, df_cols );
+      bbox, z_range, m_range, time_format, list_depths, df_cols
+      );
   }
 
   //return df_cols;
 
-  Rcpp::List res = gpx::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
+  //Rcpp::List res = gpx::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
+
+  Rcpp::List res = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
   //return res;
 

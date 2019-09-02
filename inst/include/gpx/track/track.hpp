@@ -16,6 +16,11 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time.hpp>
 
+#include "sfheaders/sf/linestring/sf_linestring.hpp"
+#include "sfheaders/sfc/bbox.hpp"
+#include "sfheaders/sfc/z_range.hpp"
+#include "sfheaders/sfc/m_range.hpp"
+
 using namespace Rcpp;
 using namespace rapidxml;
 
@@ -33,7 +38,8 @@ namespace track {
       std::vector< double >& lats,
       std::vector< double >& elev,
       std::vector< double >& time,
-      Rcpp::DataFrame& df_cols ) {
+      Rcpp::DataFrame& df_cols
+    ) {
 
     for(
       xml_node<> *trk_pt_node = trk_seg_node -> first_node("trkpt");
@@ -47,7 +53,9 @@ namespace track {
       double dlon = atof( clon );
       double dlat = atof( clat );
 
-      gpx::sfc::calculate_bbox( bbox, dlon, dlat );
+      //gpx::sfc::calculate_bbox( bbox, dlon, dlat );
+
+      sfheaders::bbox::calcualte_bbox( bbox, dlon, dlat );
 
       lons.push_back( dlon );
       lats.push_back( dlat );
@@ -65,7 +73,8 @@ namespace track {
         time.push_back( NA_REAL );
       }
 
-      gpx::sfc::calculate_range( z_range, elev.back() );
+      sfheaders::zm::calculate_z_range( z_range, elev.back() );
+      //gpx::sfc::calculate_range( z_range, elev.back() );
       // m_range is done AFTER scaling
       //gpx::sfc::calculate_range( m_range, time.back() );
     }
@@ -80,7 +89,8 @@ namespace track {
       std::vector< double >& lats,
       std::vector< double >& elev,
       std::vector< double >& time,
-      Rcpp::DataFrame& df_cols ) {
+      Rcpp::DataFrame& df_cols
+  ) {
 
     for(
       xml_node<> *trk_seg_node = trk_node -> first_node("trkseg");
@@ -122,6 +132,7 @@ namespace track {
 
     size_t n_trk = gpx::utils::xml_size( root_node, "trk" );
     Rcpp::List sfgs( n_trk );
+    //Rcpp::List properties( n_trk );
 
     // n_trk is the number of tracks in this file
     for(
@@ -160,8 +171,12 @@ namespace track {
       double min_time = Rcpp::min( nv_time );
       double max_time = Rcpp::max( nv_time );
 
-      gpx::sfc::calculate_range( m_range, min_time );
-      gpx::sfc::calculate_range( m_range, max_time );
+      sfheaders::zm::calculate_m_range( m_range, min_time );
+      sfheaders::zm::calculate_m_range( m_range, max_time );
+
+      //
+      // gpx::sfc::calculate_range( m_range, min_time );
+      // gpx::sfc::calculate_range( m_range, max_time );
 
       // I'm making it a XYZM object
       Rcpp::NumericMatrix linestring( n, 4 );
@@ -173,12 +188,18 @@ namespace track {
 
       // sfg = linestring
       linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+      //Rcpp::NumericMatrix sfg = sfheaders::sfg::sfg_linestring( linestring );
       sfgs[ trk_counter ] = linestring;
+      //sfgs[ trk_counter ] = sfg;
       trk_counter++;
       sfg_objects++;
     }
 
     sfc[ file_counter ] = sfgs;
+    //Rcpp::List this_sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
+
+    //sfc[ file_counter ] = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
+
     list_depths[ file_counter ] = trk_counter;
 
     Rcpp::StringVector sv_name = Rcpp::wrap( name );
@@ -197,9 +218,12 @@ namespace track {
       _["link"] = link,
       _["number"] = number,
       _["type"] = type
+      //_["geometry"] = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range )
     );
 
+    //sfc[ file_counter ] = this_sfc;
     properties[ file_counter ] = lst_properties;
+
   }
 
 

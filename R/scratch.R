@@ -6,7 +6,7 @@
 #
 # #library(sf)
 #
-# sf <- gpx::gpx_sf( gpx[1:10], time = "counter" )
+# sf <- gpx::gpx_sf( gpx[1:10] )
 
 
 #

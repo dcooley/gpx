@@ -17,10 +17,10 @@ Very simple package which converts [GPX](https://www.topografix.com/GPX/1/1/) fi
 
 
 ```{r}
-library(gpxsf)
+library(gpx)
 library(sf) ## for print methods of sf objects
-gpx <- system.file("gpx/city_trail.gpx", package = "gpxsf")
-sf <- gpxsf::gpx_sf( gpx )
+gpx <- system.file("gpx/city_trail.gpx", package = "gpx")
+sf <- gpx::gpx_sf( gpx )
 
 sf
 
@@ -96,7 +96,7 @@ This example compares reading 364 gpx files using this library, compared to read
 library(plotKML)
 library(microbenchmark)
 
-fp <- path.expand(".../.../")
+fp <- path.expand("../../Data/Strava/Bethan/activities/")
 l <- list.files(fp, patter = "gpx$")
 
 gpx <- paste0(fp, l)
@@ -106,7 +106,7 @@ length( gpx )
 
 microbenchmark::microbenchmark(
   gpx = {
-    sf <- gpx:::rcpp_gpx_to_sf( gpx, time = "default" )
+    sf <- gpx::gpx_sf( gpx[1:2] )
   },
   kml = {
     kml <- plotKML::readGPX( gpx[1] )

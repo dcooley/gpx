@@ -24,7 +24,7 @@
 #'
 #' @examples
 #'
-#' f <- system.file("data/run.gpx", package = "gpx")
+#' f <- system.file("gpx/city_trail.gpx", package = "gpx")
 #' sf <- gpx_sf( f )
 #' str( sf )
 #'
