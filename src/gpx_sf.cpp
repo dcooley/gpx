@@ -65,7 +65,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   // loop over each gpx file
   for( file_counter = 0; file_counter < n; file_counter++ ) {
 
-    Rcpp::List this_track;
+    //Rcpp::List this_track;
     std::string f = gpx_files[ file_counter ];
     std::ifstream theFile( f );
 
@@ -113,6 +113,9 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   Rcpp::StringVector track_links( sfg_objects );
   Rcpp::NumericVector track_numbers( sfg_objects );
   Rcpp::StringVector track_types( sfg_objects );
+
+  // TODO: the geometries will also be nested, so we need to unnest them too?
+  Rcpp::List geometries( sfg_objects );
 
   for( int i = 0; i < list_depths.size(); i++ ) {
     Rcpp::List this_track = properties[ track_counter ];
@@ -186,6 +189,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   sf.names() = sf_names;
 
   sf[ "geometry" ] = res;
+
 
 
   /*

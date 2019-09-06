@@ -55,7 +55,7 @@ namespace track {
 
       //gpx::sfc::calculate_bbox( bbox, dlon, dlat );
 
-      sfheaders::bbox::calcualte_bbox( bbox, dlon, dlat );
+      sfheaders::bbox::calculate_bbox( bbox, dlon, dlat );
 
       lons.push_back( dlon );
       lats.push_back( dlat );
