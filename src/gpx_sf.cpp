@@ -128,6 +128,9 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     Rcpp::StringVector tracks = this_track[ "name" ];
     Rcpp::StringVector comments = this_track[ "cmt" ];
     Rcpp::StringVector descriptions = this_track[ "desc" ];
+
+    Rcpp::Rcout << "descriptions: " << descriptions << std::endl;
+
     Rcpp::StringVector sources = this_track[ "src" ];
     Rcpp::StringVector links = this_track[ "link" ];
     Rcpp::NumericVector numbers = this_track[ "number" ];
@@ -176,11 +179,11 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
       sf_names[col_index] = this_col;
       if( strcmp( this_col, "name" ) == 0 ) {
         sf[col_index] = track_names;
-      } else if ( strcmp( this_col, "comment" ) == 0 ) {
+      } else if ( strcmp( this_col, "cmt" ) == 0 ) {
         sf[col_index] = track_comments;
-      } else if ( strcmp( this_col, "description" ) == 0 ) {
+      } else if ( strcmp( this_col, "desc" ) == 0 ) {
         sf[col_index] = track_descriptions;
-      } else if ( strcmp( this_col, "source" ) == 0 ) {
+      } else if ( strcmp( this_col, "src" ) == 0 ) {
         sf[col_index] = track_sources;
       } else if ( strcmp( this_col, "link" ) == 0 ) {
         sf[col_index] = track_links;
@@ -218,7 +221,6 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   } else {
     sf.attr("row.names") = Rcpp::IntegerVector(0);
   }
-
 
   sf.attr("sf_column") = "geometry";
   sf.attr("class") = Rcpp::CharacterVector::create("sf", "data.frame");

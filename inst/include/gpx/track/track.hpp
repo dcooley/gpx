@@ -144,58 +144,61 @@ namespace track {
        trk_node = trk_node -> next_sibling()
        ) {
 
-      gpx::utils::get_optional_element( trk_node, "name", name, df_cols );
-      gpx::utils::get_optional_element( trk_node, "cmt", cmt, df_cols );
-      gpx::utils::get_optional_element( trk_node, "desc", desc, df_cols );
-      gpx::utils::get_optional_element( trk_node, "src", src, df_cols );
-      gpx::utils::get_optional_element( trk_node, "link", link, df_cols );
-      gpx::utils::get_optional_element( trk_node, "number", number, df_cols );
-      gpx::utils::get_optional_element( trk_node, "type", type, df_cols );
+      if ( strcmp( trk_node -> name(), "trk" ) == 0 ) {
 
-      // TODO
-      // every sibling must be a new LINESTRING
-      gpx::track::get_segments( trk_node, bbox, z_range, m_range, lons, lats, elev, time, df_cols );
+        gpx::utils::get_optional_element( trk_node, "name", name, df_cols );
+        gpx::utils::get_optional_element( trk_node, "cmt", cmt, df_cols );
+        gpx::utils::get_optional_element( trk_node, "desc", desc, df_cols );
+        gpx::utils::get_optional_element( trk_node, "src", src, df_cols );
+        gpx::utils::get_optional_element( trk_node, "link", link, df_cols );
+        gpx::utils::get_optional_element( trk_node, "number", number, df_cols );
+        gpx::utils::get_optional_element( trk_node, "type", type, df_cols );
 
-      int n = lons.size();
+        // TODO
+        // every sibling must be a new LINESTRING
+        gpx::track::get_segments( trk_node, bbox, z_range, m_range, lons, lats, elev, time, df_cols );
 
-      Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
-      Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
-      Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
-      Rcpp::NumericVector nv_time = Rcpp::wrap( time );
+        int n = lons.size();
 
-      // datetime - default
-      if( time_format == "counter" ) {
-        gpx::counter::counter( nv_time );
-      } else if ( time_format == "normalise" ) {
-        gpx::scale::rescale( nv_time );
+        Rcpp::NumericVector nv_lons = Rcpp::wrap( lons );
+        Rcpp::NumericVector nv_lats = Rcpp::wrap( lats );
+        Rcpp::NumericVector nv_elev = Rcpp::wrap( elev );
+        Rcpp::NumericVector nv_time = Rcpp::wrap( time );
+
+        // datetime - default
+        if( time_format == "counter" ) {
+          gpx::counter::counter( nv_time );
+        } else if ( time_format == "normalise" ) {
+          gpx::scale::rescale( nv_time );
+        }
+
+        // Need to calcualte the time (m) ranges AFTER scaling the time
+        double min_time = Rcpp::min( nv_time );
+        double max_time = Rcpp::max( nv_time );
+
+        sfheaders::zm::calculate_m_range( m_range, min_time );
+        sfheaders::zm::calculate_m_range( m_range, max_time );
+
+        //
+        // gpx::sfc::calculate_range( m_range, min_time );
+        // gpx::sfc::calculate_range( m_range, max_time );
+
+        // I'm making it a XYZM object
+        Rcpp::NumericMatrix linestring( n, 4 );
+
+        linestring(_, 0) = nv_lons;
+        linestring(_, 1) = nv_lats;
+        linestring(_, 2) = nv_elev;
+        linestring(_, 3) = nv_time;
+
+        // sfg = linestring
+        //linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+        Rcpp::NumericMatrix sfg = sfheaders::sfg::sfg_linestring( linestring );
+        sfgs[ trk_counter ] = sfg;
+        //sfgs[ trk_counter ] = linestring;
+        trk_counter++;
+        sfg_objects++;
       }
-
-      // Need to calcualte the time (m) ranges AFTER scaling the time
-      double min_time = Rcpp::min( nv_time );
-      double max_time = Rcpp::max( nv_time );
-
-      sfheaders::zm::calculate_m_range( m_range, min_time );
-      sfheaders::zm::calculate_m_range( m_range, max_time );
-
-      //
-      // gpx::sfc::calculate_range( m_range, min_time );
-      // gpx::sfc::calculate_range( m_range, max_time );
-
-      // I'm making it a XYZM object
-      Rcpp::NumericMatrix linestring( n, 4 );
-
-      linestring(_, 0) = nv_lons;
-      linestring(_, 1) = nv_lats;
-      linestring(_, 2) = nv_elev;
-      linestring(_, 3) = nv_time;
-
-      // sfg = linestring
-      //linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
-      Rcpp::NumericMatrix sfg = sfheaders::sfg::sfg_linestring( linestring );
-      sfgs[ trk_counter ] = sfg;
-      //sfgs[ trk_counter ] = linestring;
-      trk_counter++;
-      sfg_objects++;
     }
 
     //sfc[ file_counter ] = sfgs;
@@ -214,14 +217,16 @@ namespace track {
     Rcpp::NumericVector nv_number = Rcpp::wrap( number );
     Rcpp::StringVector sv_type = Rcpp::wrap( type );
 
+    Rcpp::Rcout << "desc: " << sv_desc << std::endl;
+
     Rcpp::List lst_properties = Rcpp::List::create(
       _["name"] = sv_name,
-      _["cmt"] = cmt,
-      _["desc"] = desc,
-      _["src"] = src,
-      _["link"] = link,
-      _["number"] = number,
-      _["type"] = type
+      _["cmt"] = sv_cmt,
+      _["desc"] = sv_desc,
+      _["src"] = sv_src,
+      _["link"] = sv_link,
+      _["number"] = nv_number,
+      _["type"] = sv_type
       //_["geometry"] = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range )
     );
 

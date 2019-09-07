@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gpx version="1.1"
+creator="Bivouac.com 2015.12.13 https://bivouac.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/1"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<wpt lat="49.60500" lon="-123.60500">
+<ele>1659</ele>
+<name>Mount Steele 1659m</name>
+</wpt>
+<wpt lat="49.60778" lon="-123.59889">
+<ele>1647</ele>
+<name>Raven Dance Peak 1647m</name>
+</wpt>
+<wpt lat="49.60907" lon="-123.60884">
+<name>Steele Cabin</name>
+</wpt>
+</gpx>

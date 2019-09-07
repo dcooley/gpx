@@ -13,7 +13,12 @@ namespace utils {
       inner_node != NULL;
       inner_node = inner_node -> next_sibling()
     ) {
-      counter++;
+      Rcpp::Rcout << "node: " << node << std::endl;
+      Rcpp::Rcout <<  "inner node: " << inner_node ->name() << std::endl;
+      if ( strcmp( inner_node -> name(), node ) == 0 ) {
+        counter++;
+      }
+      //counter++;
     }
     return counter;
   }
@@ -28,7 +33,7 @@ namespace utils {
     if( xml_node -> first_node( node ) ) {
       const char* trk_name = xml_node  -> first_node( node ) -> value();
       vec.push_back( trk_name );
-      //Rcpp::Rcout << "keeping node: " << node << std::endl;
+      //Rcpp::Rcout << "keeping node: " << node << ", " << trk_name << std::endl;
       df_cols[ node ] = true;
     } else {
       // TODO( push_back( NA_STRING ) ) -- this doesn't work
