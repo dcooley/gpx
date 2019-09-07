@@ -131,6 +131,9 @@ namespace track {
     size_t trk_counter = 0;
 
     size_t n_trk = gpx::utils::xml_size( root_node, "trk" );
+
+    Rcpp::Rcout << "n_trk: " << n_trk << std::endl;
+
     Rcpp::List sfgs( n_trk );
     //Rcpp::List properties( n_trk );
 
@@ -187,15 +190,16 @@ namespace track {
       linestring(_, 3) = nv_time;
 
       // sfg = linestring
-      linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
-      //Rcpp::NumericMatrix sfg = sfheaders::sfg::sfg_linestring( linestring );
-      sfgs[ trk_counter ] = linestring;
-      //sfgs[ trk_counter ] = sfg;
+      //linestring.attr("class") = Rcpp::CharacterVector::create("XYZM", "LINESTRING", "sfg");
+      Rcpp::NumericMatrix sfg = sfheaders::sfg::sfg_linestring( linestring );
+      sfgs[ trk_counter ] = sfg;
+      //sfgs[ trk_counter ] = linestring;
       trk_counter++;
       sfg_objects++;
     }
 
-    sfc[ file_counter ] = sfgs;
+    //sfc[ file_counter ] = sfgs;
+    sfc = sfgs;
     //Rcpp::List this_sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
     //sfc[ file_counter ] = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );

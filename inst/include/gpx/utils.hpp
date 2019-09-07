@@ -10,7 +10,7 @@ namespace utils {
     size_t counter = 0;
     for(
       rapidxml::xml_node<> *inner_node = outer_node -> first_node( node );
-      inner_node;
+      inner_node != NULL;
       inner_node = inner_node -> next_sibling()
     ) {
       counter++;

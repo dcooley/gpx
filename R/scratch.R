@@ -50,6 +50,7 @@
 # )
 
 
+
 # sf <- gpx::gpx_sf( "~/Downloads/ATB-Heerenveen.gpx")
 
 # sf <- gpx::gpx_sf( c("~/Downloads/ATB-Heerenveen.gpx","~/Downloads/ATB-Heerenveen.gpx") )
@@ -67,5 +68,9 @@
 # str( sf )
 
 
+# sf <- gpx::gpx_sf("~/Downloads/St_Louis_Zoo_sample.gpx", time = "normalise" )
 
+
+# https://software.frankingermann.de/gpxtrackmap/gtm-examples
+#sf <- gpx::gpx_sf("~/Downloads/kuhkopfsteig-fv.gpx")
 
