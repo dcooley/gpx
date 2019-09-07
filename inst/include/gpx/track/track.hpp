@@ -201,14 +201,11 @@ namespace track {
       }
     }
 
-    //sfc[ file_counter ] = sfgs;
+    sfc[ file_counter ] = sfgs;
 
     //sfc = sfgs;
 
-    sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
-    //sfc.attr("crs") <- 4326
-
-    //Rcpp::List this_sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
+    //Rcpp::List this_sfc = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
     //sfc[ file_counter ] = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
@@ -222,8 +219,6 @@ namespace track {
     Rcpp::NumericVector nv_number = Rcpp::wrap( number );
     Rcpp::StringVector sv_type = Rcpp::wrap( type );
 
-    //Rcpp::Rcout << "desc: " << sv_desc << std::endl;
-
     Rcpp::List lst_properties = Rcpp::List::create(
       _["name"] = sv_name,
       _["cmt"] = sv_cmt,
@@ -235,7 +230,6 @@ namespace track {
       //_["geometry"] = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range )
     );
 
-    //sfc[ file_counter ] = this_sfc;
     properties[ file_counter ] = lst_properties;
 
   }

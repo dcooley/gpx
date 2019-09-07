@@ -105,9 +105,25 @@ gpx <- paste0(fp, l)
 length( gpx )
 # 364
 
+sf <- gpx::gpx_sf( gpx, time = "counter" )
+
+mapdeck(
+  	style = mapdeck_style("dark")
+	#, location = c(145., -37.8)
+	, zoom = 10
+) %>%
+  add_trips(
+    data = sf
+    , trail_length = 4000
+    , animation_speed = 800
+    , stroke_width = 25
+    , stroke_colour = "#FDE725BB"
+  )
+
+
 microbenchmark::microbenchmark(
   gpx = {
-    sf <- gpx::gpx_sf( gpx[1:2] )
+    sf <- gpx::gpx_sf( gpx[1] )
   },
   kml = {
     kml <- plotKML::readGPX( gpx[1] )
