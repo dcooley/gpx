@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gpx version="1.1"
+creator="Bivouac.com 2015.12.13 https://bivouac.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/1"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<trk>
+<name>Edwards Lake Trail</name>
+<trkseg>
+<trkpt lat="49.598920" lon="-123.666710"></trkpt>
+<trkpt lat="49.598920" lon="-123.666710"></trkpt>
+<trkpt lat="49.598480" lon="-123.665310"></trkpt>
+<trkpt lat="49.598350" lon="-123.664740"></trkpt>
+<trkpt lat="49.598160" lon="-123.664390"></trkpt>
+<trkpt lat="49.598210" lon="-123.662520"></trkpt>
+<trkpt lat="49.599180" lon="-123.661190"></trkpt>
+<trkpt lat="49.600240" lon="-123.658990"></trkpt>
+<trkpt lat="49.600200" lon="-123.658370"></trkpt>
+</trkseg>
+</trk>
+<trk>
+<name>Edwards Lake Trail (again)</name>
+<trkseg>
+<trkpt lat="49.598920" lon="-123.666710"></trkpt>
+<trkpt lat="49.598920" lon="-123.666710"></trkpt>
+<trkpt lat="49.598480" lon="-123.665310"></trkpt>
+<trkpt lat="49.598350" lon="-123.664740"></trkpt>
+<trkpt lat="49.598160" lon="-123.664390"></trkpt>
+<trkpt lat="49.598210" lon="-123.662520"></trkpt>
+<trkpt lat="49.599180" lon="-123.661190"></trkpt>
+<trkpt lat="49.600240" lon="-123.658990"></trkpt>
+<trkpt lat="49.600200" lon="-123.658370"></trkpt>
+</trkseg>
+</trk>
+</gpx>

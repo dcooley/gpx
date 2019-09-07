@@ -130,9 +130,9 @@ namespace track {
 
     size_t trk_counter = 0;
 
-    size_t n_trk = gpx::utils::xml_size( root_node, "trk" );
+    size_t n_trk = gpx::utils::node_size( root_node, "trk" );
 
-    Rcpp::Rcout << "n_trk: " << n_trk << std::endl;
+    //Rcpp::Rcout << "n_trk: " << n_trk << std::endl;
 
     Rcpp::List sfgs( n_trk );
     //Rcpp::List properties( n_trk );
@@ -202,7 +202,12 @@ namespace track {
     }
 
     //sfc[ file_counter ] = sfgs;
-    sfc = sfgs;
+
+    //sfc = sfgs;
+
+    sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
+    //sfc.attr("crs") <- 4326
+
     //Rcpp::List this_sfc = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
     //sfc[ file_counter ] = sfheaders::sfc::make_sfc( sfgs, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
@@ -217,7 +222,7 @@ namespace track {
     Rcpp::NumericVector nv_number = Rcpp::wrap( number );
     Rcpp::StringVector sv_type = Rcpp::wrap( type );
 
-    Rcpp::Rcout << "desc: " << sv_desc << std::endl;
+    //Rcpp::Rcout << "desc: " << sv_desc << std::endl;
 
     Rcpp::List lst_properties = Rcpp::List::create(
       _["name"] = sv_name,

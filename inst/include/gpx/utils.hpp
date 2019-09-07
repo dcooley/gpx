@@ -6,15 +6,15 @@
 namespace gpx {
 namespace utils {
 
-  inline std::size_t xml_size(rapidxml::xml_node<> *outer_node, const char* node) {
+  inline std::size_t node_size(rapidxml::xml_node<> *outer_node, const char* node) {
     size_t counter = 0;
     for(
       rapidxml::xml_node<> *inner_node = outer_node -> first_node( node );
       inner_node != NULL;
       inner_node = inner_node -> next_sibling()
     ) {
-      Rcpp::Rcout << "node: " << node << std::endl;
-      Rcpp::Rcout <<  "inner node: " << inner_node ->name() << std::endl;
+      //Rcpp::Rcout << "node: " << node << std::endl;
+      //Rcpp::Rcout <<  "inner node: " << inner_node ->name() << std::endl;
       if ( strcmp( inner_node -> name(), node ) == 0 ) {
         counter++;
       }

@@ -5,31 +5,13 @@
 
 #include "gpx/track/track.hpp"
 
-// #include "gpx/sf/sfg.hpp"
-// #include "gpx/sf/sfc.hpp"
-
 #include "sfheaders/sfc/sfc_types.hpp"
 
 #include <Rcpp.h>
 
-using namespace Rcpp;
 using namespace rapidxml;
 
-
 // [[Rcpp::depends(rapidxmlr)]]
-
-// std::size_t xml_size(rapidxml::xml_node<> *trk_seg_node, const char* node) {
-//   size_t counter = 0;
-//   for(
-//     rapidxml::xml_node<> *trk_pt_node = trk_seg_node -> first_node( node );
-//     trk_pt_node;
-//     trk_pt_node = trk_pt_node -> next_sibling()
-//   ) {
-//
-//     counter++;
-//   }
-//   return counter;
-// }
 
 // [[Rcpp::export]]
 Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string time_format ) {
@@ -41,7 +23,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
   int file_counter;
   int sfg_objects = 0;
 
-  Rcpp::Rcout << "file_size: " << n << std::endl;
+  //Rcpp::Rcout << "file_size: " << n << std::endl;
 
 
   Rcpp::List sfc( n );
@@ -100,7 +82,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
 
   //Rcpp::List res = gpx::sfc::construct_sfc( sfg_objects, sfc, bbox, z_range, m_range );
 
-  Rcpp::List res = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
+  //Rcpp::List res = sfheaders::sfc::make_sfc( sfc, sfheaders::sfc::SFC_LINESTRING, bbox, z_range, m_range );
 
   //return res;
 
@@ -129,7 +111,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
     Rcpp::StringVector comments = this_track[ "cmt" ];
     Rcpp::StringVector descriptions = this_track[ "desc" ];
 
-    Rcpp::Rcout << "descriptions: " << descriptions << std::endl;
+    //Rcpp::Rcout << "descriptions: " << descriptions << std::endl;
 
     Rcpp::StringVector sources = this_track[ "src" ];
     Rcpp::StringVector links = this_track[ "link" ];
@@ -198,7 +180,7 @@ Rcpp::List rcpp_gpx_to_sf( std::vector< std::string > gpx_files, std::string tim
 
   sf.names() = sf_names;
 
-  sf[ "geometry" ] = res;
+  sf[ "geometry" ] = sfc;
 
 
 

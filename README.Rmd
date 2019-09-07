@@ -97,6 +97,7 @@ library(plotKML)
 library(microbenchmark)
 
 fp <- path.expand("../../Data/Strava/Bethan/activities/")
+fp <- path.expand("~/Downloads/activities/")
 l <- list.files(fp, patter = "gpx$")
 
 gpx <- paste0(fp, l)
