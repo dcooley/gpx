@@ -123,18 +123,19 @@ mapdeck(
 
 microbenchmark::microbenchmark(
   gpx = {
-    sf <- gpx::gpx_sf( gpx[1] )
+    sf <- gpx::gpx_sf( gpx )
   },
   kml = {
-    kml <- plotKML::readGPX( gpx[1] )
+    #kml <- plotKML::readGPX( gpx[2]( )
+    lst <- lapply( gpx[1:5], plotKML::readGPX )
   },
   times = 1
 )
 
 # Unit: seconds
 #  expr      min       lq     mean   median       uq      max neval
-#   gpx 5.450537 5.450537 5.450537 5.450537 5.450537 5.450537     1
-#   kml 4.036555 4.036555 4.036555 4.036555 4.036555 4.036555     1
+#   gpx 3.486148 3.486148 3.486148 3.486148 3.486148 3.486148     1
+#   kml 3.926912 3.926912 3.926912 3.926912 3.926912 3.926912     1
 
 ```
 
