@@ -5,11 +5,11 @@ Very simple package which converts
 [GPX](https://www.topografix.com/GPX/1/1/) files to `sf` objects.
 
 ``` r
-library(gpxsf)
+library(gpx)
 library(sf) ## for print methods of sf objects
 # Linking to GEOS 3.7.1, GDAL 2.4.1, PROJ 6.0.0
 gpx <- system.file("gpx/city_trail.gpx", package = "gpxsf")
-sf <- gpxsf::gpx_sf( gpx )
+sf <- gpx::gpx_sf( gpx )
 
 sf
 # Simple feature collection with 1 feature and 2 fields
